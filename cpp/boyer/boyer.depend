@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1429561075 source:e:\bme\onlab\cpp\boyer\main.cpp
+	<iostream>
+	"matchablestring.h"
+
+1429560860 source:e:\bme\onlab\cpp\boyer\pattern.cpp
+	"pattern.h"
+
+1429560825 e:\bme\onlab\cpp\boyer\pattern.h
+	<cctype>
+	<cstring>
+
+1429560732 e:\bme\onlab\cpp\boyer\matchablestring.h
+	"pattern.h"
+
+1429560800 source:e:\bme\onlab\cpp\boyer\matchablestring.cpp
+	"matchablestring.h"
+
