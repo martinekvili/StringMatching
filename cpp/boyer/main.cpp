@@ -16,12 +16,14 @@ int main()
     }
     std::cout << std::endl;*/
 
-    Pattern p("Y HA");
+    Pattern p("AT");
     const char *c = "WHICH FINALLY HALTS.  AT THAT POINT";
     MatchAbleString s(c);
 
-    int m = s.match(p);
-    std::cout << m << " : '" << c + m << "'" ;
+    std::list<int> m = s.match(p);
+    for (typename std::list<int>::iterator p = m.begin(); p != m.end(); p++) {
+        std::cout << *p << " : '" << c + *p << "'" << std::endl;
+    }
 
     return 0;
 }

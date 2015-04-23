@@ -16,3 +16,21 @@
 1429560800 source:e:\bme\onlab\cpp\boyer\matchablestring.cpp
 	"matchablestring.h"
 
+1429802680 source:e:\github\stringmatching\cpp\boyer\main.cpp
+	<iostream>
+	"matchablestring.h"
+
+1429801991 e:\github\stringmatching\cpp\boyer\matchablestring.h
+	<list>
+	"pattern.h"
+
+1429560825 e:\github\stringmatching\cpp\boyer\pattern.h
+	<cctype>
+	<cstring>
+
+1429560860 source:e:\github\stringmatching\cpp\boyer\pattern.cpp
+	"pattern.h"
+
+1429802661 source:e:\github\stringmatching\cpp\boyer\matchablestring.cpp
+	"matchablestring.h"
+

@@ -10,12 +10,12 @@ MatchAbleString::~MatchAbleString() {
     delete[] str;
 }
 
-int MatchAbleString::match(Pattern &p) {
+int MatchAbleString::match(Pattern &p, const char *str_, size_t length_) {
     size_t i = p.getLength() - 1;
-    while (i < length) {
+    while (i < length_) {
         int j = p.getLength() - 1;
         for (; j >= 0; j--, i--) {
-            if (str[i] != p[j]) {
+            if (str_[i] != p[j]) {
                 break;
             }
         }
@@ -28,4 +28,15 @@ int MatchAbleString::match(Pattern &p) {
         }
     }
     return -1;
+}
+
+std::list<int> MatchAbleString::match(Pattern &p) {
+    std::list<int> occurrences;
+    int occ = 0, next;
+    while ((next = match(p, str + occ, length - occ)) != -1) {
+        occ += next;
+        occurrences.push_back(occ);
+        occ++;
+    }
+    return occurrences;
 }
