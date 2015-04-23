@@ -71,8 +71,6 @@ Pattern::Pattern(const char *c) {
     strcpy(str, c);
 
     delta2 = new int[length];
-
-    preprocess();
 }
 
 Pattern::~Pattern() {

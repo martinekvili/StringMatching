@@ -1,4 +1,5 @@
 #include "matchablestring.h"
+#include <iostream>
 
 MatchAbleString::MatchAbleString(const char *c) {
     length = strlen(c);
@@ -22,7 +23,8 @@ int MatchAbleString::match(Pattern &p, const char *str_, size_t length_) {
         if (j < 0) {
             return i + 1;
         } else {
-            int delta1 = p.getDelta1(str[i]);
+            //std::cout << i << ", " << j << " - " << str_[i] << " : " << p.getDelta1(str_[i]) << ", " << p.getDelta2(j) << std::endl;
+            int delta1 = p.getDelta1(str_[i]);
             int delta2 = p.getDelta2(j);
             i += delta1 > delta2 ? delta1 : delta2;
         }

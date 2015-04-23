@@ -21,8 +21,6 @@ class Pattern {
     int rpr(int i);
     void fillDelta2();
 
-    void preprocess();
-
 public:
     Pattern(const char *c);
     ~Pattern();
@@ -34,6 +32,8 @@ public:
 
     unsigned int getDelta1(int c);
     int getDelta2(int i);
+
+    void preprocess();
 };
 
 #endif // PATTERN_H_INCLUDED
