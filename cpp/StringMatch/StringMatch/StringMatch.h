@@ -13,7 +13,7 @@ class StringMatch
 {
 private:
 	char *original;
-	char **substringArray;
+	int *substringArray;
 	size_t length;
 
 	StringMatch(const StringMatch &);
@@ -24,7 +24,7 @@ public:
 
 	~StringMatch();
 
-	bool operator() (const char *one, const char *other) const;
+	//bool operator() (const char *one, const char *other) const;
 
 	void preprocess(bool parallel = false);
 

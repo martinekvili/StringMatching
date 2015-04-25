@@ -1,7 +1,7 @@
 #include "Comparers.h"
 
 int ComparerBase::compare(int num) const {
-	int comp = strncmp(substringArray[num], pattern, patternLength);
+	int comp = strncmp(str + substringArray[num], pattern, patternLength);
 	if (comp != 0) {
 		return comp;
 	}
@@ -11,7 +11,7 @@ int ComparerBase::compare(int num) const {
 }
 
 int FirstOccurenceComparer::checkIfValid(int num) const {
-	if (num == 0 || strncmp(substringArray[num - 1], pattern, patternLength) != 0) {
+	if (num == 0 || strncmp(str + substringArray[num - 1], pattern, patternLength) != 0) {
 		return 0;
 	}
 	else {
@@ -20,7 +20,7 @@ int FirstOccurenceComparer::checkIfValid(int num) const {
 }
 
 int LastOccurenceComparer::checkIfValid(int num) const {
-	if (num == length - 1 || strncmp(substringArray[num + 1], pattern, patternLength) != 0) {
+	if (num == length - 1 || strncmp(str + substringArray[num + 1], pattern, patternLength) != 0) {
 		return 0;
 	}
 	else {

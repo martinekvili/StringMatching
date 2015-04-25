@@ -2,38 +2,38 @@
 
 using namespace tbb;
 
-void StringSorter::copy(char **src, int start, int length, char **dest) {
+void StringSorter::copy(int *src, int start, int length, int *dest) {
 	for (int i = 0; i < length; i++) {
 		dest[i] = src[start + i];
 	}
 }
 
-void StringSorter::sort(char ** arr, size_t length, int depth)
+void StringSorter::sort(const char *str, int* arr, size_t length, int depth)
 {
 	if (depth == 0) {
-		std::sort(arr, arr + length, StringComparer());
+		std::sort(arr, arr + length, StringComparer(str));
 	}
 	else {
-		SortTask& t = *new(task::allocate_root()) SortTask(arr, length, depth);
+		SortTask& t = *new(task::allocate_root()) SortTask(str, arr, length, depth);
 		task::spawn_root_and_wait(t);
 	}
 }
 
 task* StringSorter::SortTask::execute() {
-	StringComparer comp;
+	StringComparer comp(str);
 
 	if (depth == 0) {
 		std::sort(whole, whole + length, comp);
 	}
 	else {
-		char **firstHalf = new char*[length / 2];
-		char **secondHalf = new char*[length / 2];
+		int *firstHalf = new int[length / 2];
+		int *secondHalf = new int[length / 2];
 		StringSorter::copy(whole, 0, length / 2, firstHalf);
 		StringSorter::copy(whole, length / 2, length / 2, secondHalf);
 
 
-		SortTask& a = *new(allocate_child()) SortTask(firstHalf, length / 2, depth - 1);
-		SortTask& b = *new(allocate_child()) SortTask(secondHalf, length / 2, depth - 1);
+		SortTask& a = *new(allocate_child()) SortTask(str, firstHalf, length / 2, depth - 1);
+		SortTask& b = *new(allocate_child()) SortTask(str, secondHalf, length / 2, depth - 1);
 		// Set ref_count to 'two children plus one for the wait".
 		set_ref_count(3);
 		// Start b running.

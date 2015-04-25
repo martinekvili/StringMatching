@@ -9,13 +9,14 @@ private:
 	virtual int checkIfValid(int num) const = 0;
 
 protected:
+	const char *str;
 	const char *pattern;
-	char ** const substringArray;
+	int * const substringArray;
 	size_t length;
 	size_t patternLength;
 
 public:
-	ComparerBase(const char *p, char ** const ssA, size_t l) : pattern(p), substringArray(ssA), length(l) {
+	ComparerBase(const char *s, const char *p, int* const ssA, size_t l) : str(s),  pattern(p), substringArray(ssA), length(l) {
 		patternLength = strlen(pattern);
 	}
 
@@ -30,7 +31,7 @@ private:
 	int checkIfValid(int num) const override;
 
 public:
-	FirstOccurenceComparer(const char *p, char ** const ssA, size_t l) : ComparerBase(p, ssA, l) {}
+	FirstOccurenceComparer(const char *s, const char *p, int* const ssA, size_t l) : ComparerBase(s, p, ssA, l) {}
 };
 
 class LastOccurenceComparer : public ComparerBase
@@ -39,7 +40,7 @@ private:
 	int checkIfValid(int num) const override;
 
 public:
-	LastOccurenceComparer(const char *p, char ** const ssA, size_t l) : ComparerBase(p, ssA, l) {}
+	LastOccurenceComparer(const char *s, const char *p, int* const ssA, size_t l) : ComparerBase(s, p, ssA, l) {}
 };
 
 #endif //COMPARERS_H
