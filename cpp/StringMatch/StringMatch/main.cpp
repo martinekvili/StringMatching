@@ -27,32 +27,43 @@ int measure(char *orig, bool parallel) {
 int main(int argc, char **argv)
 {
 	//const char orig[] = "CGATATATCGG";
-	std::ifstream t;
-	int length;
-	t.open(argv[1], std::ofstream::in);      // open input file
-	t.seekg(0, std::ios::end);    // go to the end
-	length = t.tellg();           // report location (this is the length)
-	t.seekg(0, std::ios::beg);    // go back to the beginning
-	char *buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
-	t.read(buffer, length);       // read the whole file into the buffer
-	t.close();                    // close file handle
+	//std::ifstream t;
+	//int length;
+	//t.open(argv[1], std::ofstream::in);      // open input file
+	//t.seekg(0, std::ios::end);    // go to the end
+	//length = t.tellg();           // report location (this is the length)
+	//t.seekg(0, std::ios::beg);    // go back to the beginning
+	//char *buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
+	//t.read(buffer, length);       // read the whole file into the buffer
+	//t.close();                    // close file handle
 
 
-	char *orig = new char[strlen(buffer) * 4 + 1];
-	orig[0] = '\0';
-	for (int i = 0; i < 4; i++) {
-		strcat(orig, buffer);
-	}
+	//char *orig = new char[strlen(buffer) * 4 + 1];
+	//orig[0] = '\0';
+	//for (int i = 0; i < 4; i++) {
+	//	strcat(orig, buffer);
+	//}
 
-	std::cout << strlen(orig) << ";";
+	//std::cout << strlen(orig) << ";";
 
-	delete[] buffer;
+	//delete[] buffer;
 
-	std::cout << measure(orig, false) << ";" << measure(orig, true) << std::endl;
+	//std::cout << measure(orig, false) << ";" << measure(orig, true) << std::endl;
 
-	delete[] orig;
+	//delete[] orig;
 
 	//sm.print();
+
+	const char orig[] = "CGATATATCGG";
+	StringMatch sm(orig);
+	sm.preprocess();
+	std::vector<char*> h = sm.match("TATA");
+	for (int i = 0; i < h.size(); i++) {
+		std::cout << h[i] << std::endl;
+	}
+
+	char c;
+	std::cin >> c;
 
 
 	/*start = GetTickCount();
