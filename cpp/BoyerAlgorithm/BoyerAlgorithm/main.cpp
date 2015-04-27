@@ -4,16 +4,33 @@
 
 #include "matchablestring.h"
 
-int main2()
+int main()
 {
-    Pattern p("Hence");
+	const char *s = "i had to, Hence, i peed the fence. i don't see the adHence";
+	const char *pat = "ence";
+	MatchAbleString str(s);
+    Pattern p(pat);
     p.preprocess();
-    for (int c = 0; c < 256; c++) {
+
+	std::list<int> l = str.match(p);
+	size_t patlen = strlen(pat);
+	char *tmp = new char[patlen + 1];
+	for (std::list<int>::iterator p = l.begin(); p != l.end(); p++) {
+		strncpy_s(tmp, patlen + 1, s + *p, patlen);
+		std::cout << *p << " : '" << tmp << "'" << std::endl;
+	}
+	delete[] tmp;
+
+	char c;
+	std::cin >> c;
+   
+	
+	/*for (int c = 0; c < 256; c++) {
         if (p.getDelta1(c) != p.getLength()) {
             std::cout << (char)c << " (" << c << ") : " << p.getDelta1(c) << std::endl;
         }
     }
-    std::cout << std::endl;
+    std::cout << std::endl;*/
    /* for (size_t i = 0; i < p.getLength(); i++) {
         std::cout << p.getDelta2(i) << ' ';
     }
@@ -56,39 +73,39 @@ int measure(const char *orig, const char *pat, bool parallel) {
 	return elapsed;
 }
 
-int main(int argc, char **argv)
-{
-	std::ifstream t;
-	size_t length;
-	t.open("bfranklin.txt", std::ofstream::in);      // open input file
-	t.seekg(0, std::ios::end);    // go to the end
-	length = t.tellg();           // report location (this is the length)
-	t.seekg(0, std::ios::beg);    // go back to the beginning
-	char *buffer = new char[length + 1];    // allocate memory for a buffer of appropriate dimension
-	t.read(buffer, length);       // read the whole file into the buffer
-	buffer[length] = '\0';
-	t.close();                    // close file handle
-
-
-    //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
-
-	size_t tmp = length * 32 + 1;
-	char *orig = new char[tmp];
-	orig[0] = '\0';
-	for (int i = 0; i < 32; i++) {
-		strcat_s(orig, tmp, buffer);
-	}
-
-	std::cout << strlen(orig) << std::endl;
-
-	delete[] buffer;
-
-	std::cout << measure(orig, "contiguity", false) /*<< ";" << measure(orig, true)*/ << std::endl;
-
-	delete[] orig;
-
-	char c;
-	std::cin >> c;
-
-	return 0;
-}
+//int main(int argc, char **argv)
+//{
+//	std::ifstream t;
+//	size_t length;
+//	t.open("bfranklin.txt", std::ofstream::in);      // open input file
+//	t.seekg(0, std::ios::end);    // go to the end
+//	length = t.tellg();           // report location (this is the length)
+//	t.seekg(0, std::ios::beg);    // go back to the beginning
+//	char *buffer = new char[length + 1];    // allocate memory for a buffer of appropriate dimension
+//	t.read(buffer, length);       // read the whole file into the buffer
+//	buffer[length] = '\0';
+//	t.close();                    // close file handle
+//
+//
+//    //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
+//
+//	size_t tmp = length * 32 + 1;
+//	char *orig = new char[tmp];
+//	orig[0] = '\0';
+//	for (int i = 0; i < 32; i++) {
+//		strcat_s(orig, tmp, buffer);
+//	}
+//
+//	std::cout << strlen(orig) << std::endl;
+//
+//	delete[] buffer;
+//
+//	std::cout << measure(orig, "contiguity", false) /*<< ";" << measure(orig, true)*/ << std::endl;
+//
+//	delete[] orig;
+//
+//	char c;
+//	std::cin >> c;
+//
+//	return 0;
+//}

@@ -2,6 +2,7 @@
 #define MATCHABLESTRING_H_INCLUDED
 
 #include <list>
+#include <vector>
 #include "pattern.h"
 
 class MatchAbleString {
@@ -11,7 +12,8 @@ class MatchAbleString {
     MatchAbleString(const MatchAbleString&);
     MatchAbleString& operator=(const MatchAbleString&);
 
-    int match(Pattern &p, const char *str, size_t length);
+    int findFirst(Pattern &p, const char *str, size_t length);
+	std::list<int> matchSubstr(Pattern &p, const char *str_, int length_, int startPos);
 
 public:
     MatchAbleString(const char *c);
