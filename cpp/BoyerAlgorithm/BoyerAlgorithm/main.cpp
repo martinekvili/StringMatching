@@ -12,7 +12,7 @@ int main()
     Pattern p(pat);
     p.preprocess();
 
-	std::list<int> l = str.match(p);
+	std::list<int> l = str.match(p, true);
 	size_t patlen = strlen(pat);
 	char *tmp = new char[patlen + 1];
 	for (std::list<int>::iterator p = l.begin(); p != l.end(); p++) {

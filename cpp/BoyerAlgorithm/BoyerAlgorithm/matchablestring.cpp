@@ -35,7 +35,7 @@ int MatchAbleString::findFirst(Pattern &p, const char *str_, size_t length_) {
 std::list<int> MatchAbleString::matchSubstr(Pattern &p, const char *str_, int length_, int startPos) {
 	std::list<int> occurrences;
 	int occ = 0, next;
-	while ((next = findFirst(p, str_ + occ, length_ - occ)) != -1) {
+	while ((next = MatchAbleString::findFirst(p, str_ + occ, length_ - occ)) != -1) {
 		occ += next;
 		occurrences.push_back(occ + startPos);
 		occ++;
@@ -43,25 +43,41 @@ std::list<int> MatchAbleString::matchSubstr(Pattern &p, const char *str_, int le
 	return occurrences;
 }
 
-std::list<int> MatchAbleString::match(Pattern &p) {
-	const int parts = 2;
+std::list<int> MatchAbleString::matchSubstr(Pattern &p, int parts, int i) {
+	/*
+	* Tehát a szöveget parts darabra bontjuk.
+	* Mindegyik kezdõpontja az i * length / parts, ezek az osztópontok.
+	* Azért hogy meglegyen a megfelelõ átfedés, a hossz a length / parts-nál p.getLength() - 1 -gyel hosszabb,
+	* kivéve az utolsó string esetén, ahol viszont a kerekítésekbõl származó különbséget vesszük hozzá.
+	*/
+	return MatchAbleString::matchSubstr(p, str + i * length / parts,
+		(i == parts - 1) ? length - i * length / parts : length / parts + p.getLength() - 1, i * length / parts);
+}
+
+std::list<int> MatchAbleString::match(Pattern &p, bool parallel) {
+	const int parts = 8;
 
     std::vector<std::list<int>> occurrencesArray(parts);
     
-	/*
-	 * Tehát a szöveget parts darabra bontjuk.
-	 * Mindegyik kezdõpontja az i * length / parts, ezek az osztópontok.
-	 * Azért hogy meglegyen a megfelelõ átfedés, a hossz a length / parts-nál p.getLength() - 1 -gyel hosszabb,
-	 * kivéve az utolsó string esetén, ahol viszont a kerekítésekbõl származó különbséget vesszük hozzá.
-	 */
-	for (int i = 0; i < parts; i++) {
-		occurrencesArray[i] = matchSubstr(p, str + i * length / parts,
-			(i == parts - 1) ? length - i * length / parts : length / parts + p.getLength() - 1, i * length / parts);
+	if (!parallel) {
+		for (int i = 0; i < parts; i++) {
+			occurrencesArray[i] = matchSubstr(p, parts, i);
+		}
 	}
+	else {
+		tbb::parallel_for(tbb::blocked_range<int>(1, parts), ParallelMatcher(*this, p, occurrencesArray, parts));
+	}
+	
 
 	std::list<int> occurrences;
 	for (int i = 0; i < parts; i++) {
 		occurrences.insert(occurrences.end(), occurrencesArray[i].begin(), occurrencesArray[i].end());
 	}
     return occurrences;
+}
+
+void MatchAbleString::ParallelMatcher::operator() (const tbb::blocked_range<int>& range) const {
+	for (int i = range.begin(); i != range.end(); ++i) {
+		array[i] = mas.matchSubstr(p, parts, i);
+	}
 }
