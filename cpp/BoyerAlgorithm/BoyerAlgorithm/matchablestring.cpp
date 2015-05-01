@@ -4,7 +4,7 @@
 MatchAbleString::MatchAbleString(const char *c) {
     length = strlen(c);
     str = new char[length + 1];
-    strcpy(str, c);
+    strcpy_s(str, length + 1, c);
 }
 
 MatchAbleString::~MatchAbleString() {
@@ -14,14 +14,14 @@ MatchAbleString::~MatchAbleString() {
 int MatchAbleString::findFirst(Pattern &p, const char *str_, size_t length_) {
     size_t i = p.getLength() - 1;
     while (i < length_) {
-        int j = p.getLength() - 1;
+        int j = (int) p.getLength() - 1;
         for (; j >= 0; j--, i--) {
             if (str_[i] != p[j]) {
                 break;
             }
         }
         if (j < 0) {
-            return i + 1;
+            return (int) i + 1;
         } else {
             //std::cout << i << ", " << j << " - " << str_[i] << " : " << p.getDelta1(str_[i]) << ", " << p.getDelta2(j) << std::endl;
             int delta1 = p.getDelta1(str_[i]);
