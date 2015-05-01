@@ -17,26 +17,26 @@ class MatchAbleString {
     MatchAbleString& operator=(const MatchAbleString&);
 
     static int findFirst(Pattern &p, const char *str, size_t length);
-	static std::list<int> matchSubstr(Pattern &p, const char *str_, int length_, int startPos);
+	static std::vector<int> matchSubstr(Pattern &p, const char *str_, int length_, int startPos);
 
-	std::list<int> matchSubstr(Pattern &p, int parts, int i);
+	std::vector<int> matchSubstr(Pattern &p, int parts, int i);
 
 public:
     MatchAbleString(const char *c);
     ~MatchAbleString();
 
-	std::list<int> match(Pattern &p, bool parallel = false);
+	std::vector<int> match(Pattern &p, bool parallel = false);
 
 	class ParallelMatcher {
 		MatchAbleString &mas;
 		Pattern &p;
-		std::vector<std::list<int>> &array;
+		std::vector<std::vector<int>> &array;
 		int parts;
 
 	public:
 		void operator() (const tbb::blocked_range<int>& range) const;
 
-		ParallelMatcher(MatchAbleString &mas, Pattern &p, std::vector<std::list<int>> &a, int parts) : mas(mas), p(p), array(a), parts(parts) {}
+		ParallelMatcher(MatchAbleString &mas, Pattern &p, std::vector<std::vector<int>> &a, int parts) : mas(mas), p(p), array(a), parts(parts) {}
 	};
 };
 

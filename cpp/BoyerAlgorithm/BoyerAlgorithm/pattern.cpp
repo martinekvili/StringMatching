@@ -68,7 +68,7 @@ void Pattern::preprocess() {
 Pattern::Pattern(const char *c) {
     length = strlen(c);
     str = new char[length + 1];
-    strcpy(str, c);
+    strcpy_s(str, length + 1, c);
 
     delta2 = new int[length];
 }
