@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "container/list"
 )
 
 type Pattern struct {
@@ -67,7 +68,7 @@ func (p *Pattern) Preprocess() {
     p.setDelta2()
 }
 
-func FindFirst(str string, pat *Pattern) int {
+func findFirst(str string, pat *Pattern) int {
     i := pat.length - 1
     strlen := len(str)
     
@@ -93,6 +94,52 @@ func FindFirst(str string, pat *Pattern) int {
     return -1
 }
 
+func matchSubstr(str string, pat *Pattern, startPos int) (occurrences list.List) {
+   // fmt.Println(startPos)
+    occ := 0
+    next := findFirst(str[occ :], pat)
+    
+    for next != -1 {
+        occ += next
+        //fmt.Println(occ + startPos)
+        occurrences.PushBack(occ + startPos)
+        occ++
+        next = findFirst(str[occ :], pat)
+    }
+    
+    return
+}
+
+func Match (str string, pat *Pattern) []int {
+    parts := 8
+    strlen := len(str)
+    
+    size := 0
+    occurrencesArray := make([]list.List, parts)
+    
+    for i := 0; i < parts; i++ {
+        var subStr string
+        if (i < parts - 1) {
+            subStr = str[i * strlen / parts : (i + 1) * strlen / parts + pat.length - 1]
+        } else {
+            subStr = str[i * strlen / parts :]
+        }
+        occurrencesArray[i] = matchSubstr(subStr, pat, i * strlen / parts)
+        size += occurrencesArray[i].Len()
+    }
+    
+    occurrences := make([]int, size)
+    j := 0
+    for i := 0; i < parts; i++ {
+        for e := occurrencesArray[i].Front(); e != nil; e = e.Next() {
+            occurrences[j] = e.Value.(int)
+            j++
+        }
+    }
+    
+    return occurrences
+}
+
 func main() {
     var pat Pattern
     pat.SetString("ence")
@@ -109,8 +156,18 @@ func main() {
     }
     fmt.Println()*/
     
-    str := "i had to, hence, i peed the fence"
+    str := "i had to, hence, i peed the fence. i don't see the adHence"
     
-    found := FindFirst(str, &pat)
-    fmt.Println(str[found : found + pat.length])
+    /*l := matchSubstr(str, &pat)
+    for e := l.Front(); e != nil; e = e.Next() {
+    found := e.Value.(int)
+		fmt.Printf("%v: %s\n", found, str[found : found + pat.length])
+	}*/
+    
+    for _, found := range Match(str, &pat) {
+        fmt.Printf("%v: %s\n", found, str[found : found + pat.length])
+    }
+    
+    //found := FindFirst(str, &pat)
+    //fmt.Println(str[found : found + pat.length])
 }
