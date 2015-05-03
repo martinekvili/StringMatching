@@ -110,24 +110,48 @@ func matchSubstr(str string, pat *Pattern, startPos int) (occurrences list.List)
     return
 }
 
-func Match (str string, pat *Pattern) []int {
+func matchSubstr_(str string, pat *Pattern, strlen int, i int,
+                    parts int, occurrencesArray []list.List, ch chan int) {
+    var subStr string
+    if (i < parts - 1) {
+        subStr = str[i * strlen / parts : (i + 1) * strlen / parts + pat.length - 1]
+    } else {
+        subStr = str[i * strlen / parts :]
+    }
+    occurrencesArray[i] = matchSubstr(subStr, pat, i * strlen / parts)
+    ch <- occurrencesArray[i].Len()
+}
+
+func Match (str string, pat *Pattern, parallel bool) []int {
     parts := 8
     strlen := len(str)
     
     size := 0
     occurrencesArray := make([]list.List, parts)
     
-    for i := 0; i < parts; i++ {
-        var subStr string
-        if (i < parts - 1) {
-            subStr = str[i * strlen / parts : (i + 1) * strlen / parts + pat.length - 1]
-        } else {
-            subStr = str[i * strlen / parts :]
+    if (!parallel) {
+        for i := 0; i < parts; i++ {
+            var subStr string
+            if (i < parts - 1) {
+                subStr = str[i * strlen / parts : (i + 1) * strlen / parts + pat.length - 1]
+            } else {
+                subStr = str[i * strlen / parts :]
+            }
+            occurrencesArray[i] = matchSubstr(subStr, pat, i * strlen / parts)
+            size += occurrencesArray[i].Len()
         }
-        occurrencesArray[i] = matchSubstr(subStr, pat, i * strlen / parts)
-        size += occurrencesArray[i].Len()
+    } else {
+        ch := make(chan int)
+        
+        for i := 0; i < parts; i++ {
+            go matchSubstr_(str, pat, strlen, i, parts, occurrencesArray, ch)
+        }
+        
+        for i := 0; i < parts; i++ {
+            size += <- ch
+        }
     }
-    
+      
     occurrences := make([]int, size)
     j := 0
     for i := 0; i < parts; i++ {
@@ -164,7 +188,7 @@ func main() {
 		fmt.Printf("%v: %s\n", found, str[found : found + pat.length])
 	}*/
     
-    for _, found := range Match(str, &pat) {
+    for _, found := range Match(str, &pat, true) {
         fmt.Printf("%v: %s\n", found, str[found : found + pat.length])
     }
     
