@@ -3,6 +3,9 @@ package main
 import (
     "fmt"
     "container/list"
+    "time"
+    "runtime"
+    "io/ioutil"
 )
 
 type Pattern struct {
@@ -164,34 +167,53 @@ func Match (str string, pat *Pattern, parallel bool) []int {
     return occurrences
 }
 
+func Measure(str string, pattern string, parallel bool) int {
+	var start time.Time
+	var took int64
+    var occ []int
+
+	for db := 0; db < 5000; db++ {
+		var pat Pattern
+        pat.SetString(pattern)
+		
+		start = time.Now()
+        pat.Preprocess()
+		occ = Match(str, &pat, parallel)
+		took += time.Since(start).Nanoseconds() / 1000000
+	}
+	
+    if (parallel) {
+        fmt.Print("Parallel ")
+    } else {
+        fmt.Print("Single-thread ")
+    }
+    fmt.Printf("algorithm took %v ms, and found %v matches\n", took, len(occ))
+	return int(took);
+}
+
 func main() {
-    var pat Pattern
-    pat.SetString("ence")
+    runtime.GOMAXPROCS(runtime.NumCPU())
     
-    pat.Preprocess()
+    bytes, err := ioutil.ReadFile("bfranklin.txt")
+	
+	if (err != nil) {
+		fmt.Print("No such file")
+		return
+	}
+	
+	original := string(bytes)
+	
+	for i := 0; i < 320; i++ {
+		original += string(bytes)
+	}
+	
+	fmt.Printf("%v\n", len(original))
     
-    /*for i := 0; i < 128; i++ {
-        c := rune(i)
-        fmt.Printf("%v: %v\n", c, pat.delta1[i])
-    }*/
+    //str := "i had to, hence, i peed the fence. i don't see the adHence"
+    pat := "contiguity"
     
-    /*for i := 0; i < pat.length; i++ {
-        fmt.Printf("%v ", pat.delta2[i])
-    }
-    fmt.Println()*/
+    Measure(original, pat, false)
+    Measure(original, pat, true)
     
-    str := "i had to, hence, i peed the fence. i don't see the adHence"
-    
-    /*l := matchSubstr(str, &pat)
-    for e := l.Front(); e != nil; e = e.Next() {
-    found := e.Value.(int)
-		fmt.Printf("%v: %s\n", found, str[found : found + pat.length])
-	}*/
-    
-    for _, found := range Match(str, &pat, true) {
-        fmt.Printf("%v: %s\n", found, str[found : found + pat.length])
-    }
-    
-    //found := FindFirst(str, &pat)
-    //fmt.Println(str[found : found + pat.length])
+    //fmt.Printf("%v\n%v\n", Measure(original, pat, false), Measure(original, pat, true))
 }
