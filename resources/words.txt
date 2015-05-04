@@ -1,0 +1,6 @@
+bfranklin	-	contiguity
+dostoyevsky 	- 	hereditary
+jackrabbit	-	knapsack
+napoleon	-	expressive
+dante		- 	adversary
+spacewrecked	-	plentifully

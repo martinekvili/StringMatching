@@ -6,6 +6,7 @@ import (
     "time"
     "runtime"
     "io/ioutil"
+    "os"
 )
 
 type Pattern struct {
@@ -19,12 +20,12 @@ func (p *Pattern) SetString(s string) {
     p.str = s
     p.length = len(s)
     
-    p.delta1 = make([]int, 128)
+    p.delta1 = make([]int, 256)
     p.delta2 = make([]int, p.length)
 }
 
 func (p *Pattern) setDelta1() { 
-    for i := 0; i < 128; i++ {
+    for i := 0; i < 256; i++ {
         p.delta1[i] = p.length
     }
     
@@ -32,7 +33,7 @@ func (p *Pattern) setDelta1() {
         p.delta1[p.str[i]] = i
     }
     
-    for i := 0; i < 128; i++ {
+    for i := 0; i < 256; i++ {
         if p.delta1[i] != p.length {
             p.delta1[i] = p.length - 1 - p.delta1[i]
         }
@@ -170,7 +171,7 @@ func Match (str string, pat *Pattern, parallel bool) []int {
 func Measure(str string, pattern string, parallel bool) int {
 	var start time.Time
 	var took int64
-    var occ []int
+    //var occ []int
 
 	for db := 0; db < 5000; db++ {
 		var pat Pattern
@@ -178,23 +179,23 @@ func Measure(str string, pattern string, parallel bool) int {
 		
 		start = time.Now()
         pat.Preprocess()
-		occ = Match(str, &pat, parallel)
+		/*occ = */Match(str, &pat, parallel)
 		took += time.Since(start).Nanoseconds() / 1000000
 	}
 	
-    if (parallel) {
+    /*if (parallel) {
         fmt.Print("Parallel ")
     } else {
         fmt.Print("Single-thread ")
     }
-    fmt.Printf("algorithm took %v ms, and found %v matches\n", took, len(occ))
-	return int(took);
+    fmt.Printf("algorithm took %v ms, and found %v matches\n", took, len(occ))*/
+	return int(took) / 5;
 }
 
 func main() {
     runtime.GOMAXPROCS(runtime.NumCPU())
     
-    bytes, err := ioutil.ReadFile("..\\..\\resources\\bfranklin.txt")
+    bytes, err := ioutil.ReadFile("..\\..\\resources\\" + os.Args[1])
 	
 	if (err != nil) {
 		fmt.Print("No such file")
@@ -203,17 +204,18 @@ func main() {
 	
 	original := string(bytes)
 	
-	for i := 0; i < 320; i++ {
+	for i := 0; i < 299; i++ {
 		original += string(bytes)
 	}
 	
-	fmt.Printf("%v\n", len(original))
+	fmt.Printf("%v;", len(original))
     
     //str := "i had to, hence, i peed the fence. i don't see the adHence"
-    pat := "contiguity"
+    //pat := "contiguity"
     
-    Measure(original, pat, false)
-    Measure(original, pat, true)
+    fmt.Printf("%v;%v\n", Measure(original, os.Args[2], false),
+                          Measure(original, os.Args[2], true))
+    
     
     //fmt.Printf("%v\n%v\n", Measure(original, pat, false), Measure(original, pat, true))
 }
