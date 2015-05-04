@@ -4,7 +4,7 @@ StringMatch::StringMatch(const char *orig) {
 	length = strlen(orig);
 
 	original = new char[length + 1];
-	strcpy(original, orig);
+	strcpy_s(original, length + 1, orig);
 
 	substringArray = new int[length];
 	for (int i = 0; i < length; i++)

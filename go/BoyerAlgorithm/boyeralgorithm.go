@@ -194,7 +194,7 @@ func Measure(str string, pattern string, parallel bool) int {
 func main() {
     runtime.GOMAXPROCS(runtime.NumCPU())
     
-    bytes, err := ioutil.ReadFile("bfranklin.txt")
+    bytes, err := ioutil.ReadFile("..\\..\\resources\\bfranklin.txt")
 	
 	if (err != nil) {
 		fmt.Print("No such file")

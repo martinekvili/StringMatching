@@ -172,7 +172,7 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	//original := "CGATATATCGG"
-	bytes, err := ioutil.ReadFile(os.Args[1])
+	bytes, err := ioutil.ReadFile("..\\..\\resources\\" + os.Args[1])
 	
 	if (err != nil) {
 		fmt.Print("No such file")

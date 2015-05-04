@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <Windows.h>
 
 #include "StringMatch.h"
@@ -27,43 +28,52 @@ int measure(char *orig, bool parallel) {
 int main(int argc, char **argv)
 {
 	//const char orig[] = "CGATATATCGG";
-	//std::ifstream t;
-	//int length;
-	//t.open(argv[1], std::ofstream::in);      // open input file
-	//t.seekg(0, std::ios::end);    // go to the end
-	//length = t.tellg();           // report location (this is the length)
-	//t.seekg(0, std::ios::beg);    // go back to the beginning
-	//char *buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
-	//t.read(buffer, length);       // read the whole file into the buffer
-	//t.close();                    // close file handle
 
+	#if defined _M_IX86
+		std::string path = "..\\..\\..\\resources\\";
+	#elif defined _M_X64
+		std::string path = "..\\..\\..\\..\\resources\\";
+	#endif
 
-	//char *orig = new char[strlen(buffer) * 4 + 1];
-	//orig[0] = '\0';
-	//for (int i = 0; i < 4; i++) {
-	//	strcat(orig, buffer);
-	//}
+	path += argv[1];
 
-	//std::cout << strlen(orig) << ";";
+	std::ifstream t;
+	int length;
+	t.open(path, std::ofstream::in);      // open input file
+	t.seekg(0, std::ios::end);    // go to the end
+	length = t.tellg();           // report location (this is the length)
+	t.seekg(0, std::ios::beg);    // go back to the beginning
+	char *buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
+	t.read(buffer, length);       // read the whole file into the buffer
+	t.close();                    // close file handle
 
-	//delete[] buffer;
+	size_t tmp = strlen(buffer) * 4 + 1;
+	char *orig = new char[tmp];
+	orig[0] = '\0';
+	for (int i = 0; i < 4; i++) {
+		strcat_s(orig, tmp, buffer);
+	}
 
-	//std::cout << measure(orig, false) << ";" << measure(orig, true) << std::endl;
+	std::cout << strlen(orig) << ";";
 
-	//delete[] orig;
+	delete[] buffer;
+
+	std::cout << measure(orig, false) << ";" << measure(orig, true) << std::endl;
+
+	delete[] orig;
 
 	//sm.print();
 
-	const char orig[] = "CGATATATCGG";
-	StringMatch sm(orig);
-	sm.preprocess();
-	std::vector<char*> h = sm.match("TATA");
-	for (int i = 0; i < h.size(); i++) {
-		std::cout << h[i] << std::endl;
-	}
+	//const char orig[] = "CGATATATCGG";
+	//StringMatch sm(orig);
+	//sm.preprocess();
+	//std::vector<char*> h = sm.match("TATA");
+	//for (int i = 0; i < h.size(); i++) {
+	//	std::cout << h[i] << std::endl;
+	//}
 
-	char c;
-	std::cin >> c;
+	/*char c;
+	std::cin >> c;*/
 
 
 	/*start = GetTickCount();
