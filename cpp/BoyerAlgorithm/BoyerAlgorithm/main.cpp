@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include <windows.h>
 
 #include "matchablestring.h"
@@ -48,14 +49,14 @@
 //    return 0;
 //}
 
-int measure(const char *orig, const char *pat, bool parallel) {
+int measure(const char *orig, const char *pat, bool parallel, int num) {
 	long int start;
 	int elapsed = 0;
 	std::vector<int> l;
 
 	MatchAbleString str(orig);
 
-	for (int i = 0; i < 5000; i++) {
+	for (int i = 0; i < 5 * num; i++) {
 		Pattern p(pat);
 
 		start = GetTickCount();
@@ -113,10 +114,10 @@ int main(int argc, char **argv)
     //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
 	//size_t length = strlen(buffer);
 
-	size_t tmp = (length + 1) * 300 + 1;
+	size_t tmp = (length + 1) * 4 + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
-	for (int i = 0; i < 300; i++) {
+	for (int i = 0; i < 4; i++) {
 		strcat_s(orig, tmp, buffer);
 	}
 
@@ -124,8 +125,11 @@ int main(int argc, char **argv)
 
 	std::cout << strlen(orig) << ";";
 
-	std::cout << measure(orig, argv[2], false) << ";";
-	std::cout << measure(orig, argv[2], true) << std::endl;
+	int num = atoi(argv[3]);
+	std::cout << num << ";";
+
+	//std::cout << measure(orig, argv[2], false) << ";";
+	std::cout << measure(orig, argv[2], true, num) << std::endl;
 
 	delete[] orig;
 

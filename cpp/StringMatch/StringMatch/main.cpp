@@ -5,12 +5,15 @@
 #include <fstream>
 #include <string>
 #include <Windows.h>
+#include <cstdlib>
 
 #include "StringMatch.h"
 
-int measure(char *orig, bool parallel) {
+int measure(const char *orig, const char *pat, bool parallel, int num) {
 	long int start;
 	int elapsed = 0;
+
+	//std::vector<char*> l;
 
 	for (int i = 0; i < 5; i++) {
 		StringMatch sm(orig);
@@ -19,9 +22,16 @@ int measure(char *orig, bool parallel) {
 		sm.preprocess(parallel);
 		elapsed += GetTickCount() - start;
 
+		for (int j = 0; j < num; j++) {
+			start = GetTickCount();
+			/*l = */sm.match(pat);
+			elapsed += GetTickCount() - start;
+		}
+
 		//std::cout << "Preprocessing took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms\n" << std::endl;
 	}
 	
+	//std::cout << l.size() << std::endl;
 	return elapsed / 5;
 }
 
@@ -38,16 +48,19 @@ int main(int argc, char **argv)
 	path += argv[1];
 
 	std::ifstream t;
-	int length;
-	t.open(path, std::ofstream::in);      // open input file
-	t.seekg(0, std::ios::end);    // go to the end
-	length = t.tellg();           // report location (this is the length)
-	t.seekg(0, std::ios::beg);    // go back to the beginning
-	char *buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
+	t.open(path, std::ifstream::binary);      // open input file
+	t.seekg(0, t.end);    // go to the end
+	int length = t.tellg();           // report location (this is the length)
+
+	//std::cout << length << std::endl;
+
+	t.seekg(0, t.beg);    // go back to the beginning
+	char *buffer = new char[length + 1];    // allocate memory for a buffer of appropriate dimension
 	t.read(buffer, length);       // read the whole file into the buffer
+	buffer[length] = '\0';
 	t.close();                    // close file handle
 
-	size_t tmp = strlen(buffer) * 4 + 1;
+	size_t tmp = (length + 1) * 4 + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
 	for (int i = 0; i < 4; i++) {
@@ -56,9 +69,14 @@ int main(int argc, char **argv)
 
 	std::cout << strlen(orig) << ";";
 
+	int num = atoi(argv[3]);
+	std::cout << num << ";";
+
 	delete[] buffer;
 
-	std::cout << measure(orig, false) << ";" << measure(orig, true) << std::endl;
+	std::cout << measure(orig, argv[2], true, num) << std::endl;
+
+	//std::cout << measure(orig, false) << ";" << measure(orig, true) << std::endl;
 
 	delete[] orig;
 
