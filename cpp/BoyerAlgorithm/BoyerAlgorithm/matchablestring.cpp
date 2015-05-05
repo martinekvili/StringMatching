@@ -11,7 +11,7 @@ MatchAbleString::~MatchAbleString() {
     delete[] str;
 }
 
-int MatchAbleString::findFirst(Pattern &p, const char *str_, size_t length_) {
+int MatchAbleString::findFirst(const Pattern &p, const char *str_, size_t length_) {
     size_t i = p.getLength() - 1;
     while (i < length_) {
         int j = (int) p.getLength() - 1;
@@ -32,18 +32,19 @@ int MatchAbleString::findFirst(Pattern &p, const char *str_, size_t length_) {
     return -1;
 }
 
-std::vector<int> MatchAbleString::matchSubstr(Pattern &p, const char *str_, int length_, int startPos) {
-	std::vector<int> occurrences;
+std::vector<int>* MatchAbleString::matchSubstr(const Pattern &p, const char *str_, int length_, int startPos) {
+	std::vector<int> *occurrences = new std::vector<int>();
 	int occ = 0, next;
 	while ((next = MatchAbleString::findFirst(p, str_ + occ, length_ - occ)) != -1) {
 		occ += next;
-		occurrences.push_back(occ + startPos);
+		//std::cout << "found" << std::endl;
+		occurrences->push_back(occ + startPos);
 		occ++;
 	}
 	return occurrences;
 }
 
-std::vector<int> MatchAbleString::matchSubstr(Pattern &p, int parts, int i) {
+std::vector<int>* MatchAbleString::matchSubstr(const Pattern &p, int parts, int i) {
 	/*
 	* Tehát a szöveget parts darabra bontjuk.
 	* Mindegyik kezdõpontja az i * length / parts, ezek az osztópontok.
@@ -54,10 +55,10 @@ std::vector<int> MatchAbleString::matchSubstr(Pattern &p, int parts, int i) {
 		(i == parts - 1) ? length - i * length / parts : length / parts + p.getLength() - 1, i * length / parts);
 }
 
-std::vector<int> MatchAbleString::match(Pattern &p, bool parallel) {
+std::vector<int> MatchAbleString::match(const Pattern &p, bool parallel) {
 	const int parts = 8;
 
-    std::vector<std::vector<int>> occurrencesArray(parts);
+    std::vector<std::vector<int>*> occurrencesArray(parts);
     
 	if (!parallel) {
 		for (int i = 0; i < parts; i++) {
@@ -70,7 +71,8 @@ std::vector<int> MatchAbleString::match(Pattern &p, bool parallel) {
 	
 	size_t fullSize = 0;
 	for (int i = 0; i < parts; i++) {
-		fullSize += occurrencesArray[i].size();
+		fullSize += occurrencesArray[i]->size();
+		//std::cout << occurrencesArray[i]->size() << std::endl;
 	}
 
 	std::vector<int> occurrences;
@@ -79,12 +81,14 @@ std::vector<int> MatchAbleString::match(Pattern &p, bool parallel) {
 		/*for (int j = 0; j < occurrencesArray[i].size(); j++) {
 			occurrences.push_back(occurrencesArray[i][j]);
 		}*/
-		occurrences.insert(occurrences.end(), occurrencesArray[i].begin(), occurrencesArray[i].end());
+		occurrences.insert(occurrences.end(), occurrencesArray[i]->begin(), occurrencesArray[i]->end());
+		delete occurrencesArray[i];
 	}
     return occurrences;
 }
 
 void MatchAbleString::ParallelMatcher::operator() (const tbb::blocked_range<int>& range) const {
+	//std::cout << "szal" << std::endl;
 	for (int i = range.begin(); i != range.end(); ++i) {
 		array[i] = mas.matchSubstr(p, parts, i);
 	}

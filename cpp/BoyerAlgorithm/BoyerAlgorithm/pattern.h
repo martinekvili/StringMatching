@@ -25,13 +25,13 @@ public:
     Pattern(const char *c);
     ~Pattern();
 
-    size_t getLength() {
+    size_t getLength() const {
         return length;
     }
-    char operator[] (int i);
+    char operator[] (int i) const;
 
-    unsigned int getDelta1(int c);
-    int getDelta2(int i);
+    unsigned int getDelta1(int c) const;
+    int getDelta2(int i) const;
 
     void preprocess();
 };

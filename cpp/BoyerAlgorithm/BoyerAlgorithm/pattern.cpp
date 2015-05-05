@@ -4,15 +4,15 @@ void Pattern::setDelta1(int c, unsigned int val) {
     delta1[c] = val;
 }
 
-unsigned int Pattern::getDelta1(int c) {
+unsigned int Pattern::getDelta1(int c) const {
     return delta1[c];
 }
 
-int Pattern::getDelta2(int i) {
+int Pattern::getDelta2(int i) const {
     return delta2[i];
 }
 
-char Pattern::operator[] (int i) {
+char Pattern::operator[] (int i) const {
     return str[i];
 }
 

@@ -55,7 +55,7 @@ int measure(const char *orig, const char *pat, bool parallel) {
 
 	MatchAbleString str(orig);
 
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 5000; i++) {
 		Pattern p(pat);
 
 		start = GetTickCount();
@@ -72,49 +72,72 @@ int measure(const char *orig, const char *pat, bool parallel) {
 		delete[] szo;*/
 	}
 
-	std::cout << (parallel ? "Parallel" : "Single thread") << " matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
-	std::cout << "Found " << l.size() << " matches." << std::endl;
-	for (int i = 0; i < l.size(); i++) {
+	//std::cout << (parallel ? "Parallel" : "Single thread") << " matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
+	//std::cout << "Found " << l.size() << " matches." << std::endl;
+	/*for (int i = 0; i < l.size(); i++) {
 		std::cout << l[i] << " ";
 	}
-	std::cout << std::endl;
-	return elapsed;
+	std::cout << std::endl;*/
+	return elapsed / 5;
 }
 
 int main(int argc, char **argv)
 {
+#if defined _M_IX86
+	std::string path = "..\\..\\..\\resources\\";
+#elif defined _M_X64
+	std::string path = "..\\..\\..\\..\\resources\\";
+#endif
+
+	path += argv[1];
+
 	std::ifstream t;
-	size_t length;
-	t.open("..\\..\\..\\resources\\bfranklin.txt", std::ofstream::in);      // open input file
-	t.seekg(0, std::ios::end);    // go to the end
-	length = t.tellg();           // report location (this is the length)
-	t.seekg(0, std::ios::beg);    // go back to the beginning
+	t.open(path, std::ifstream::binary);      // open input file
+	t.seekg(0, t.end);    // go to the end
+	int length = t.tellg();           // report location (this is the length)
+
+	//std::cout << length << std::endl;
+
+	t.seekg(0, t.beg);    // go back to the beginning
 	char *buffer = new char[length + 1];    // allocate memory for a buffer of appropriate dimension
 	t.read(buffer, length);       // read the whole file into the buffer
 	buffer[length] = '\0';
 	t.close();                    // close file handle
 
+	/*int i = 1;
+	for (char *c = buffer; *c != '\0'; c++, i++) {
+		std::cout << i << ". " << (int)*c << ": " << *c << std::endl;
+	}*/
 
+	 
     //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
 	//size_t length = strlen(buffer);
 
-	size_t tmp = length * 20 + 1;
+	size_t tmp = (length + 1) * 300 + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 300; i++) {
 		strcat_s(orig, tmp, buffer);
 	}
 
-	std::cout << strlen(orig) << std::endl;
-
 	delete[] buffer;
 
-	std::cout << measure(orig, "contiguity", false) << ";" << measure(orig, "contiguity", true) << std::endl;
+	std::cout << strlen(orig) << ";";
+
+	std::cout << measure(orig, argv[2], false) << ";";
+	std::cout << measure(orig, argv[2], true) << std::endl;
 
 	delete[] orig;
 
-	char c;
-	std::cin >> c;
+	/*char c;
+	std::cin >> c;*/
+
+	/*if (c == 'w') {
+		std::ofstream fil;
+		fil.open("bla.txt", std::ios_base::out);
+		fil << orig;
+		fil.close();
+	}*/
 
 	return 0;
 }
