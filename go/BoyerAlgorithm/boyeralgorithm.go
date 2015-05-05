@@ -7,6 +7,7 @@ import (
     "runtime"
     "io/ioutil"
     "os"
+    "strconv"
 )
 
 type Pattern struct {
@@ -168,12 +169,12 @@ func Match (str string, pat *Pattern, parallel bool) []int {
     return occurrences
 }
 
-func Measure(str string, pattern string, parallel bool) int {
+func Measure(str string, pattern string, parallel bool, num int) int {
 	var start time.Time
 	var took int64
     //var occ []int
 
-	for db := 0; db < 5000; db++ {
+	for db := 0; db < 5 * num; db++ {
 		var pat Pattern
         pat.SetString(pattern)
 		
@@ -201,10 +202,16 @@ func main() {
 		fmt.Print("No such file")
 		return
 	}
+    
+    num, err2 := strconv.Atoi(os.Args[3])
+    if err2 != nil {
+        fmt.Print("Bad number")
+		return
+    }
 	
 	original := string(bytes)
 	
-	for i := 0; i < 299; i++ {
+	for i := 0; i < 7; i++ {
 		original += string(bytes)
 	}
 	
@@ -213,8 +220,10 @@ func main() {
     //str := "i had to, hence, i peed the fence. i don't see the adHence"
     //pat := "contiguity"
     
-    fmt.Printf("%v;%v\n", Measure(original, os.Args[2], false),
-                          Measure(original, os.Args[2], true))
+    /*fmt.Printf("%v;%v\n", Measure(original, os.Args[2], false),
+                          Measure(original, os.Args[2], true))*/
+                          
+    fmt.Printf("%v\n", Measure(original, os.Args[2], true, num))
     
     
     //fmt.Printf("%v\n%v\n", Measure(original, pat, false), Measure(original, pat, true))

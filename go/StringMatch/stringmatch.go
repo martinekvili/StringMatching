@@ -7,6 +7,7 @@ import (
 	"time"
 	"runtime"
 	"os"
+    "strconv"
 )
 
 func parallelSort(arr []string, depth int, ch chan int) {
@@ -151,7 +152,7 @@ func match(substringArray []string, pattern string) []string {
 	}
 }
 
-func measure (original string, substringArray []string, parallel bool) int {
+func measure (original string, substringArray []string, pattern string, parallel bool, num int) int {
 	var start time.Time
 	var took int64
 
@@ -163,6 +164,12 @@ func measure (original string, substringArray []string, parallel bool) int {
 		start = time.Now()
 		preprocess(substringArray, parallel)
 		took += time.Since(start).Nanoseconds() / 1000000
+        
+        for i := 0; i < num; i++ {
+            start = time.Now()
+            match(substringArray, pattern)
+            took += time.Since(start).Nanoseconds() / 1000000
+        }
 	}
 	
 	return int(took / 5);
@@ -178,6 +185,12 @@ func main() {
 		fmt.Print("No such file")
 		return
 	}
+    
+    num, err2 := strconv.Atoi(os.Args[3])
+    if err2 != nil {
+        fmt.Print("Bad number")
+		return
+    }
 	
 	original := string(bytes)
 	
@@ -186,14 +199,18 @@ func main() {
 	}
 	
 	fmt.Printf("%v;", len(original))
+    
+    fmt.Printf("%v;", num)
 	
 	substringArray := make([]string, len(original))
 	
 	
-	took := measure(original, substringArray, false)
+	/*took := measure(original, substringArray, false)
 	fmt.Printf("%v;", took)
 	took = measure(original, substringArray, true)
-	fmt.Printf("%v\n", took)
+	fmt.Printf("%v\n", took)*/
+    
+    fmt.Printf("%v\n", measure(original, substringArray, os.Args[2], true, num))
 	
 	/*
 	start = time.Now()
