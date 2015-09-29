@@ -16,7 +16,7 @@ namespace BoyerAlgorithm
             Pattern p = new Pattern(pat);
             p.PreProcess();
 
-	        List<int> l = str.Match(p, false);
+	        List<int> l = str.Match(p, true);
 
             foreach (int i in l)
 	        {

@@ -83,7 +83,7 @@ namespace BoyerAlgorithm
 	        }
 	        else 
             {
-		        // TODO
+                Parallel.For(0, parts, i => occurrencesArray[i] = matchSubstr(p, parts, i));
 	        }
 
 	        List<int> occurrences = new List<int>();
