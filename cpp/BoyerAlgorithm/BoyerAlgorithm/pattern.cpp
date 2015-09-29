@@ -35,7 +35,8 @@ void Pattern::fillDelta1() {
 }
 
 int Pattern::rpr(int i) {
-    int subPatternLength = strlen(str + i + 1);
+    //int subPatternLength = strlen(str + i + 1);
+	int subPatternLength = length - i - 1;
     int j = i - 1;
     for (; j >= -subPatternLength; j--) {
         if (j >= 0) {
