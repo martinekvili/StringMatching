@@ -10,15 +10,15 @@ namespace BoyerAlgorithm
     {
         private string Str;
 
-        private static int findFirst(Pattern p, string str)
+        private int findFirst(Pattern p, int startPos, int endPos)
         {
             int i = p.Str.Length - 1;
-            while (i < str.Length)
+            while (i < endPos - startPos)
             {
                 int j = p.Str.Length - 1;
                 for (; j >= 0; j--, i--)
                 {
-                    if (str[i] != p.Str[j])
+                    if (Str[startPos + i] != p.Str[j])
                     {
                         break;
                     }
@@ -29,7 +29,7 @@ namespace BoyerAlgorithm
                 }
                 else
                 {
-                    int delta1 = p.getDelta1(Convert.ToInt32(str[i]));
+                    int delta1 = p.getDelta1(Convert.ToInt32(Str[startPos + i]));
                     int delta2 = p.Delta2[j];
                     i += delta1 > delta2 ? delta1 : delta2;
                 }
@@ -37,11 +37,11 @@ namespace BoyerAlgorithm
             return -1;
         }
 
-	    private static List<int> matchSubstr(Pattern p, string str, int startPos)
+	    private List<int> _matchSubstr(Pattern p, int startPos, int endPos)
         {
             List<int> occurrences = new List<int>();
 	        int occ = 0, next;
-	        while ((next = MatchAbleString.findFirst(p, str.Substring(occ))) != -1)
+	        while ((next = findFirst(p, startPos + occ, endPos)) != -1)
             {
 		        occ += next;
 		        occurrences.Add(occ + startPos);
@@ -60,7 +60,7 @@ namespace BoyerAlgorithm
 	         */
             int startPos = i * Str.Length / parts;
             int length = Str.Length / parts + p.Str.Length - 1;
-	        return MatchAbleString.matchSubstr(p, (i == parts - 1) ? Str.Substring(startPos) : Str.Substring(startPos, length), startPos);
+	        return _matchSubstr(p, startPos, (i == parts - 1) ? Str.Length : startPos + length);
         }
 
         public MatchAbleString(string s)
