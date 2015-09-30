@@ -75,6 +75,18 @@ namespace BoyerAlgorithm
             }
         }
 
+        public int getDelta1(int ch)
+        {
+            if (ch >= 256)
+            {
+                return Str.Length;
+            }
+            else
+            {
+                return Delta1[ch];
+            }
+        }
+
         public Pattern(string str)
         {
             Str = str;

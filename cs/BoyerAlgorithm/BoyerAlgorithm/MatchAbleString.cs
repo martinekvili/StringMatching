@@ -29,7 +29,7 @@ namespace BoyerAlgorithm
                 }
                 else
                 {
-                    int delta1 = p.Delta1[Convert.ToInt32(str[i])];
+                    int delta1 = p.getDelta1(Convert.ToInt32(str[i]));
                     int delta2 = p.Delta2[j];
                     i += delta1 > delta2 ? delta1 : delta2;
                 }
