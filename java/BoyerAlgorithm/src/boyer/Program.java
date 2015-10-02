@@ -41,9 +41,9 @@ public class Program {
 
 		elapsed /= 1000000;
 
-		System.out.println((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s "
-				+ (elapsed % 1000) + " ms");
-		System.out.println("Found " + l.size() + " matches.");
+//		System.out.println((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s "
+//				+ (elapsed % 1000) + " ms");
+//		System.out.println("Found " + l.size() + " matches.");
 		return elapsed / 5;
 	}
 
@@ -66,12 +66,12 @@ public class Program {
 				orig += str;
 			}
 
-			System.out.println(orig.length() + ";");
+			System.out.print(orig.length() + ";");
 
 			// int num = Int32.Parse(args[2]);
 			// Console.Write(num + ";");
 
-			System.out.println(measure(orig, args[1], false, 1000) + ";");
+			System.out.print(measure(orig, args[1], false, 1000) + ";");
 			System.out.println(measure(orig, args[1], true, 1000) + ";");
 			// System.out.println(measure(orig, "plentifully", false, 1000) +
 			// ";");
