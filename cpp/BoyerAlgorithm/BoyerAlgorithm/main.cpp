@@ -73,8 +73,8 @@ int measure(const char *orig, const char *pat, bool parallel, int num) {
 		delete[] szo;*/
 	}
 
-	//std::cout << (parallel ? "Parallel" : "Single thread") << " matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
-	//std::cout << "Found " << l.size() << " matches." << std::endl;
+	/*std::cout << (parallel ? "Parallel" : "Single thread") << " matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
+	std::cout << "Found " << l.size() << " matches." << std::endl;*/
 	/*for (int i = 0; i < l.size(); i++) {
 		std::cout << l[i] << " ";
 	}
@@ -114,10 +114,10 @@ int main(int argc, char **argv)
     //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
 	//size_t length = strlen(buffer);
 
-	size_t tmp = (length + 1) * 4 + 1;
+	size_t tmp = (length + 1) * 320 + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 320; i++) {
 		strcat_s(orig, tmp, buffer);
 	}
 
@@ -125,11 +125,11 @@ int main(int argc, char **argv)
 
 	std::cout << strlen(orig) << ";";
 
-	int num = atoi(argv[3]);
-	std::cout << num << ";";
+	/*int num = atoi(argv[3]);
+	std::cout << num << ";";*/
 
-	//std::cout << measure(orig, argv[2], false) << ";";
-	std::cout << measure(orig, argv[2], true, num) << std::endl;
+	std::cout << measure(orig, argv[2], false, 1000) << ";";
+	std::cout << measure(orig, argv[2], true, 1000) << std::endl;
 
 	delete[] orig;
 
