@@ -11,10 +11,7 @@
 
 class MatchAbleString {
     char *str;
-    size_t length;
-
-    MatchAbleString(const MatchAbleString&);
-    MatchAbleString& operator=(const MatchAbleString&);
+    int length;
 
     static int findFirst(const Pattern &p, const char *str, size_t length);
 	static std::vector<int>* matchSubstr(const Pattern &p, const char *str_, int length_, int startPos);
@@ -25,19 +22,10 @@ public:
     MatchAbleString(const char *c);
     ~MatchAbleString();
 
+	MatchAbleString(const MatchAbleString&) = delete;
+	MatchAbleString& operator=(const MatchAbleString&) = delete;
+
 	std::vector<int> match(const Pattern &p, bool parallel = false);
-
-	class ParallelMatcher {
-		MatchAbleString &mas;
-		const Pattern &p;
-		std::vector<std::vector<int>*> &array;
-		int parts;
-
-	public:
-		void operator() (const tbb::blocked_range<int>& range) const;
-
-		ParallelMatcher(MatchAbleString &mas, const Pattern &p, std::vector<std::vector<int>*> &a, int parts) : mas(mas), p(p), array(a), parts(parts) {}
-	};
 };
 
 #endif // MATCHABLESTRING_H_INCLUDED

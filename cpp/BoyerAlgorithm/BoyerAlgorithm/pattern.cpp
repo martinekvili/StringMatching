@@ -1,21 +1,5 @@
 #include "pattern.h"
 
-void Pattern::setDelta1(int c, unsigned int val) {
-    delta1[c] = val;
-}
-
-unsigned int Pattern::getDelta1(int c) const {
-    return delta1[c];
-}
-
-int Pattern::getDelta2(int i) const {
-    return delta2[i];
-}
-
-char Pattern::operator[] (int i) const {
-    return str[i];
-}
-
 void Pattern::fillDelta1() {
     for (int i = 0; i < 256; i++) {
         delta1[i] = length;
@@ -67,7 +51,7 @@ void Pattern::preprocess() {
 }
 
 Pattern::Pattern(const char *c) {
-    length = strlen(c);
+    length = (int) strlen(c);
     str = new char[length + 1];
     strcpy_s(str, length + 1, c);
 

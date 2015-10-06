@@ -6,16 +6,11 @@
 
 class Pattern {
     unsigned int delta1[256];
-
     int *delta2;
 
     char *str;
-    size_t length;
+    int length;
 
-    Pattern(const Pattern&);
-    Pattern& operator=(const Pattern&);
-
-    void setDelta1(int c, unsigned int val);
     void fillDelta1();
 
     int rpr(int i);
@@ -25,13 +20,24 @@ public:
     Pattern(const char *c);
     ~Pattern();
 
-    size_t getLength() const {
+	Pattern(const Pattern&) = delete;
+	Pattern& operator=(const Pattern&) = delete;
+
+    int getLength() const {
         return length;
     }
-    char operator[] (int i) const;
 
-    unsigned int getDelta1(int c) const;
-    int getDelta2(int i) const;
+	unsigned int Pattern::getDelta1(int c) const {
+		return delta1[c];
+	}
+
+	int Pattern::getDelta2(int i) const {
+		return delta2[i];
+	}
+
+	char Pattern::operator[] (int i) const {
+		return str[i];
+	}
 
     void preprocess();
 };

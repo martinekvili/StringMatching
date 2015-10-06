@@ -114,10 +114,10 @@ int main(int argc, char **argv)
     //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
 	//size_t length = strlen(buffer);
 
-	size_t tmp = (length + 1) * 320 + 1;
+	size_t tmp = (length + 1) * 64 + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
-	for (int i = 0; i < 320; i++) {
+	for (int i = 0; i < 64; i++) {
 		strcat_s(orig, tmp, buffer);
 	}
 
