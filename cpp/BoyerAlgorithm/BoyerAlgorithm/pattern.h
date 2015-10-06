@@ -1,37 +1,41 @@
 #ifndef PATTERN_H_INCLUDED
 #define PATTERN_H_INCLUDED
 
-#include <cctype>
-#include <cstring>
+#include <string>
+#include <vector>
 
 class Pattern {
-    unsigned int delta1[256];
+	std::string str;
 
-    int *delta2;
+    std::vector<int> delta1;
+	std::vector<int> delta2;
 
-    char *str;
-    size_t length;
-
-    Pattern(const Pattern&);
-    Pattern& operator=(const Pattern&);
-
-    void setDelta1(int c, unsigned int val);
     void fillDelta1();
 
     int rpr(int i);
     void fillDelta2();
 
 public:
-    Pattern(const char *c);
-    ~Pattern();
+	Pattern(std::string s) : str(s), delta1(256), delta2(s.length()) {}
 
-    size_t getLength() const {
-        return length;
+	Pattern(const Pattern&) = delete;
+	Pattern& operator=(const Pattern&) = delete;
+
+    int getLength() const {
+        return (int) str.length();
     }
-    char operator[] (int i) const;
 
-    unsigned int getDelta1(int c) const;
-    int getDelta2(int i) const;
+	char operator[] (int i) const {
+		return str[i];
+	}
+
+	int getDelta1(int c) const {
+		return delta1[c];
+	}
+
+	int getDelta2(int i) const {
+		return delta2[i];
+	}
 
     void preprocess();
 };

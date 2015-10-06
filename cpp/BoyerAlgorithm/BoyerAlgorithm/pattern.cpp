@@ -1,52 +1,35 @@
 #include "pattern.h"
 
-void Pattern::setDelta1(int c, unsigned int val) {
-    delta1[c] = val;
-}
-
-unsigned int Pattern::getDelta1(int c) const {
-    return delta1[c];
-}
-
-int Pattern::getDelta2(int i) const {
-    return delta2[i];
-}
-
-char Pattern::operator[] (int i) const {
-    return str[i];
-}
-
 void Pattern::fillDelta1() {
     for (int i = 0; i < 256; i++) {
-        delta1[i] = length;
+        delta1[i] = (int) str.length();
     }
 
-    for (int i = (int) length - 1; i >= 0; i--) {
-        if (delta1[(int) str[i]] == length) {
+    for (int i = (int) str.length() - 1; i >= 0; i--) {
+        if (delta1[(int) str[i]] == (int) str.length()) {
             delta1[(int) str[i]] = i;
         }
     }
 
     for (int i = 0; i < 256; i++) {
-        if (delta1[i] != length) {
-            delta1[i] = length - 1 - delta1[i];
+        if (delta1[i] != (int) str.length()) {
+            delta1[i] = (int) str.length() - 1 - delta1[i];
         }
     }
 }
 
 int Pattern::rpr(int i) {
-    //int subPatternLength = strlen(str + i + 1);
-	int subPatternLength = length - i - 1;
+	int subPatternLength = (int) str.length() - i - 1;
     int j = i - 1;
     for (; j >= -subPatternLength; j--) {
         if (j >= 0) {
-            if (strncmp(str + j, str + i + 1, subPatternLength) == 0) {
+            if (str.compare(j, subPatternLength, str, i + 1, subPatternLength) == 0) {
                 if (j == 0 || str[j - 1] != str[i]) {
                     break;
                 }
             }
         } else {
-            if (strncmp(str, str + i + 1 - j, subPatternLength + j) == 0) {
+			if (str.compare(0, subPatternLength + j, str, i + 1 - j, subPatternLength + j) == 0) {
                 break;
             }
         }
@@ -55,26 +38,13 @@ int Pattern::rpr(int i) {
 }
 
 void Pattern::fillDelta2() {
-    delta2[length - 1] = 1;
-    for (int i = length - 2; i >= 0; i--) {
-        delta2[i] = length - rpr(i);
+    delta2[(int) str.length() - 1] = 1;
+    for (int i = (int) str.length() - 2; i >= 0; i--) {
+        delta2[i] = (int) str.length() - rpr(i);
     }
 }
 
 void Pattern::preprocess() {
     fillDelta1();
     fillDelta2();
-}
-
-Pattern::Pattern(const char *c) {
-    length = strlen(c);
-    str = new char[length + 1];
-    strcpy_s(str, length + 1, c);
-
-    delta2 = new int[length];
-}
-
-Pattern::~Pattern() {
-    delete[] delta2;
-    delete[] str;
 }

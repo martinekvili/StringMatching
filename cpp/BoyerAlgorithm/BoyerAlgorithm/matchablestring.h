@@ -1,8 +1,8 @@
 #ifndef MATCHABLESTRING_H_INCLUDED
 #define MATCHABLESTRING_H_INCLUDED
 
-#include <list>
 #include <vector>
+#include <memory>
 
 #include "tbb\blocked_range.h"
 #include "tbb\parallel_for.h"
@@ -10,34 +10,19 @@
 #include "pattern.h"
 
 class MatchAbleString {
-    char *str;
-    size_t length;
+    std::string str;
 
-    MatchAbleString(const MatchAbleString&);
-    MatchAbleString& operator=(const MatchAbleString&);
-
-    static int findFirst(const Pattern &p, const char *str, size_t length);
-	static std::vector<int>* matchSubstr(const Pattern &p, const char *str_, int length_, int startPos);
-
-	std::vector<int>* matchSubstr(const Pattern &p, int parts, int i);
+    int findFirst(const Pattern &p, int startPos, int endPos);
+	std::unique_ptr<std::vector<int>> _matchSubstr(const Pattern &p, int startPos, int endPos);
+	std::unique_ptr<std::vector<int>> matchSubstr(const Pattern &p, int parts, int i);
 
 public:
-    MatchAbleString(const char *c);
-    ~MatchAbleString();
+	MatchAbleString(std::string s) : str(s)  {}
 
-	std::vector<int> match(const Pattern &p, bool parallel = false);
+	MatchAbleString(const MatchAbleString&) = delete;
+	MatchAbleString& operator=(const MatchAbleString&) = delete;
 
-	class ParallelMatcher {
-		MatchAbleString &mas;
-		const Pattern &p;
-		std::vector<std::vector<int>*> &array;
-		int parts;
-
-	public:
-		void operator() (const tbb::blocked_range<int>& range) const;
-
-		ParallelMatcher(MatchAbleString &mas, const Pattern &p, std::vector<std::vector<int>*> &a, int parts) : mas(mas), p(p), array(a), parts(parts) {}
-	};
+	std::unique_ptr<std::vector<int>> match(const Pattern &p, bool parallel = false);
 };
 
 #endif // MATCHABLESTRING_H_INCLUDED
