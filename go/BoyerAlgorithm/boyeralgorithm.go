@@ -7,7 +7,7 @@ import (
     "runtime"
     "io/ioutil"
     "os"
-    "strconv"
+    //"strconv"
 )
 
 type Pattern struct {
@@ -100,13 +100,11 @@ func findFirst(str string, pat *Pattern) int {
 }
 
 func matchSubstr(str string, pat *Pattern, startPos int) (occurrences list.List) {
-   // fmt.Println(startPos)
     occ := 0
     next := findFirst(str[occ :], pat)
     
     for next != -1 {
         occ += next
-        //fmt.Println(occ + startPos)
         occurrences.PushBack(occ + startPos)
         occ++
         next = findFirst(str[occ :], pat)
@@ -169,20 +167,18 @@ func Match (str string, pat *Pattern, parallel bool) []int {
     return occurrences
 }
 
-func Measure(str string, pattern string, parallel bool, num int) int {
-	var start time.Time
-	var took int64
-    //var occ []int
+func Measure(str string, pattern string, parallel bool, num int) int {	
+	start := time.Now()		// mérés kezdete
 
 	for db := 0; db < 5 * num; db++ {
 		var pat Pattern
         pat.SetString(pattern)
 		
-		start = time.Now()
         pat.Preprocess()
 		/*occ = */Match(str, &pat, parallel)
-		took += time.Since(start).Nanoseconds() / 1000000
 	}
+	
+	took := time.Since(start).Nanoseconds() / 1000000	// mérés vége
 	
     /*if (parallel) {
         fmt.Print("Parallel ")
@@ -203,15 +199,15 @@ func main() {
 		return
 	}
     
-    num, err2 := strconv.Atoi(os.Args[3])
+    /*num, err2 := strconv.Atoi(os.Args[3])
     if err2 != nil {
         fmt.Print("Bad number")
 		return
-    }
+    }*/
 	
 	original := string(bytes)
 	
-	for i := 0; i < 7; i++ {
+	for i := 0; i < 63; i++ {
 		original += string(bytes)
 	}
 	
@@ -222,8 +218,9 @@ func main() {
     
     /*fmt.Printf("%v;%v\n", Measure(original, os.Args[2], false),
                           Measure(original, os.Args[2], true))*/
-                          
-    fmt.Printf("%v\n", Measure(original, os.Args[2], true, num))
+              
+    fmt.Printf("%v;", Measure(original, os.Args[2], false, 1000))
+    fmt.Printf("%v\n", Measure(original, os.Args[2], true, 1000))
     
     
     //fmt.Printf("%v\n%v\n", Measure(original, pat, false), Measure(original, pat, true))
