@@ -24,26 +24,26 @@ public class Program {
 	// }
 
 	static private long measure(String orig, String pat, boolean parallel, int num) {
-		long startTime;
-		long elapsed = 0;
+		@SuppressWarnings("unused")
 		List<Integer> l = null;
 
 		MatchAbleString str = new MatchAbleString(orig);
 
+		long startTime = System.nanoTime(); // mérés kezdete
+
 		for (int i = 0; i < 5 * num; i++) {
 			Pattern p = new Pattern(pat);
 
-			startTime = System.nanoTime();
 			p.preprocess();
 			l = str.match(p, parallel);
-			elapsed += System.nanoTime() - startTime;
 		}
 
-		elapsed /= 1000000;
+		long elapsed = (System.nanoTime() - startTime) / 1000000; // mérés vége
 
-//		System.out.println((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s "
-//				+ (elapsed % 1000) + " ms");
-//		System.out.println("Found " + l.size() + " matches.");
+		// System.out.println((parallel ? "Parallel" : "Single thread") + "
+		// matching took " + (elapsed / 1000) + " s "
+		// + (elapsed % 1000) + " ms");
+		// System.out.println("Found " + l.size() + " matches.");
 		return elapsed / 5;
 	}
 
