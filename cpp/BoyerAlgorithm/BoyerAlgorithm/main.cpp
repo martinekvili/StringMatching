@@ -72,13 +72,7 @@ int measure(const char *orig, const char *pat, bool parallel, int num) {
 }
 
 int main(int argc, char **argv) {
-
-#if defined _M_IX86
-	std::string path = "..\\..\\..\\resources\\";
-#elif defined _M_X64
-	std::string path = "..\\..\\..\\..\\resources\\";
-#endif
-
+	std::string path = "..\\resources\\";
 	path += argv[1];
 
 	std::ifstream t;

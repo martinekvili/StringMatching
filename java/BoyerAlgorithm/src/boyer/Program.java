@@ -48,8 +48,8 @@ public class Program {
 	}
 
 	public static void main(String[] args) {
-		String path = "..\\..\\..\\resources\\" + args[0];
-		// String path = "..\\..\\resources\\spacewrecked.txt";
+		String path = "..\\resources\\" + args[0];
+		// String path = "..\\resources\\spacewrecked.txt";
 
 		BufferedReader reader = null;
 		try {
