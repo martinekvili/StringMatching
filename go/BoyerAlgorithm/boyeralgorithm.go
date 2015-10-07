@@ -7,7 +7,7 @@ import (
     "runtime"
     "io/ioutil"
     "os"
-    //"strconv"
+    "strconv"
 )
 
 type Pattern struct {
@@ -199,29 +199,26 @@ func main() {
 		return
 	}
     
-    /*num, err2 := strconv.Atoi(os.Args[3])
+    multiplier, err2 := strconv.Atoi(os.Args[3])
     if err2 != nil {
         fmt.Print("Bad number")
 		return
-    }*/
+    }
+	
+	num, err3 := strconv.Atoi(os.Args[4])
+    if err3 != nil {
+        fmt.Print("Bad number")
+		return
+    }
 	
 	original := string(bytes)
 	
-	for i := 0; i < 63; i++ {
+	for i := 0; i < multiplier - 1; i++ {
 		original += string(bytes)
 	}
 	
 	fmt.Printf("%v;", len(original))
-    
-    //str := "i had to, hence, i peed the fence. i don't see the adHence"
-    //pat := "contiguity"
-    
-    /*fmt.Printf("%v;%v\n", Measure(original, os.Args[2], false),
-                          Measure(original, os.Args[2], true))*/
               
-    fmt.Printf("%v;", Measure(original, os.Args[2], false, 1000))
-    fmt.Printf("%v\n", Measure(original, os.Args[2], true, 1000))
-    
-    
-    //fmt.Printf("%v\n%v\n", Measure(original, pat, false), Measure(original, pat, true))
+    fmt.Printf("%v;", Measure(original, os.Args[2], false, num))
+    fmt.Printf("%v\n", Measure(original, os.Args[2], true, num))
 }

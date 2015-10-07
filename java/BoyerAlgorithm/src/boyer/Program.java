@@ -61,18 +61,18 @@ public class Program {
 			}
 			String str = sb.toString();
 
+			int multiplier = Integer.parseInt(args[2]);
+			int num = Integer.parseInt(args[3]);
+
 			String orig = str;
-			for (int i = 0; i < 63; i++) {
+			for (int i = 0; i < multiplier - 1; i++) {
 				orig += str;
 			}
 
 			System.out.print(orig.length() + ";");
 
-			// int num = Int32.Parse(args[2]);
-			// Console.Write(num + ";");
-
-			System.out.print(measure(orig, args[1], false, 1000) + ";");
-			System.out.println(measure(orig, args[1], true, 1000) + ";");
+			System.out.print(measure(orig, args[1], false, num) + ";");
+			System.out.println(measure(orig, args[1], true, num) + ";");
 			// System.out.println(measure(orig, "plentifully", false, 1000) +
 			// ";");
 			// System.out.println(measure(orig, "plentifully", true, 1000) +

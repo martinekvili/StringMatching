@@ -60,19 +60,19 @@ namespace BoyerAlgorithm
             //string path = "..\\resources\\spacewrecked.txt";
             string str = File.ReadAllText(path);
 
+            int multiplier = Int32.Parse(args[2]);
+            int num = Int32.Parse(args[3]);
+
             string orig = str;
-            for (int i = 0; i < 63; i++)
+            for (int i = 0; i < multiplier - 1; i++)
             {
                 orig += str;
             }
 
             Console.Write(orig.Length + ";");
 
-            //int num = Int32.Parse(args[2]);
-            //Console.Write(num + ";");
-
-            Console.Write(measure(orig, args[1], false, 1000) + ";");
-            Console.WriteLine(measure(orig, args[1], true, 1000) + ";");
+            Console.Write(measure(orig, args[1], false, num) + ";");
+            Console.WriteLine(measure(orig, args[1], true, num) + ";");
             //Console.Write(measure(orig, "plentifully", false, 1000) + ";");
             //Console.WriteLine(measure(orig, "plentifully", true, 1000) + ";");
         }

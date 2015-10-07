@@ -88,10 +88,13 @@ int main(int argc, char **argv) {
 	buffer[length] = '\0';
 	t.close();                    // close file handle
 
-	size_t tmp = (length + 1) * 64 + 1;
+	int multiplier = atoi(argv[3]);
+	int num = atoi(argv[4]);
+
+	size_t tmp = (length + 1) * multiplier + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
-	for (int i = 0; i < 64; i++) {
+	for (int i = 0; i < multiplier; i++) {
 		strcat_s(orig, tmp, buffer);
 	}
 
@@ -99,11 +102,8 @@ int main(int argc, char **argv) {
 
 	std::cout << strlen(orig) << ";";
 
-	/*int num = atoi(argv[3]);
-	std::cout << num << ";";*/
-
-	std::cout << measure(orig, argv[2], false, 1000) << ";";
-	std::cout << measure(orig, argv[2], true, 1000) << std::endl;
+	std::cout << measure(orig, argv[2], false, num) << ";";
+	std::cout << measure(orig, argv[2], true, num) << std::endl;
 
 	delete[] orig;
 

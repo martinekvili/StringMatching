@@ -4,6 +4,8 @@
     [switch] $java,
     [switch] $go)
 
+$multiplier = 1280
+$num = 50
 
 $files = ("bfranklin.txt", "dostoyevsky.txt", "jackrabbit.txt", "napoleon.txt", "dante.txt", "spacewrecked.txt")
 
@@ -13,8 +15,8 @@ $files = ("bfranklin.txt", "dostoyevsky.txt", "jackrabbit.txt", "napoleon.txt", 
 $words = ("contiguity", "hereditary", "smithereen", "expressive", "forfeiture", "plentifull")
 
 if ($cpp) {
-    if (Test-Path data_cpp.csv) {
-        Remove-Item data_cpp.csv
+    if (Test-Path BoyerAlgorithm\data_cpp.csv) {
+        Remove-Item BoyerAlgorithm\data_cpp.csv
     }
 
     for ($i = 0; $i -lt 6; $i += 1) {
@@ -22,16 +24,16 @@ if ($cpp) {
                        -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cpp\BoyerAlgorithm\x64\Release\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" | 
-                                                     Out-File data_cpp.csv -Append
+	    ..\cpp\BoyerAlgorithm\x64\Release\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" $multiplier $num | 
+                                                     Out-File BoyerAlgorithm\data_cpp.csv -Append
     }
 
     Write-Progress -Activity "C++ matching" -Completed
 }
 
 if ($cs) {
-    if (Test-Path data_cs.csv) {
-        Remove-Item data_cs.csv
+    if (Test-Path BoyerAlgorithm\data_cs.csv) {
+        Remove-Item BoyerAlgorithm\data_cs.csv
     }
 
     for ($i = 0; $i -lt 6; $i += 1) {
@@ -39,14 +41,14 @@ if ($cs) {
                        -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cs\BoyerAlgorithm\BoyerAlgorithm\bin\Release\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" | 
-                                                    Out-File data_cs.csv -Append
+	    ..\cs\BoyerAlgorithm\BoyerAlgorithm\bin\Release\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" $multiplier $num | 
+                                                    Out-File BoyerAlgorithm\data_cs.csv -Append
     }
 }
 
 if ($java) {
-    if (Test-Path data_java.csv) {
-        Remove-Item data_java.csv
+    if (Test-Path BoyerAlgorithm\data_java.csv) {
+        Remove-Item BoyerAlgorithm\data_java.csv
     }
 
     for ($i = 0; $i -lt 6; $i += 1) {
@@ -54,14 +56,14 @@ if ($java) {
                        -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    java -cp ..\java\BoyerAlgorithm\bin\ boyer.Program $($files[$i]) "$($words[$i])" | 
-                                                    Out-File data_java.csv -Append
+	    java -cp ..\java\BoyerAlgorithm\bin\ boyer.Program $($files[$i]) "$($words[$i])" $multiplier $num | 
+                                                    Out-File BoyerAlgorithm\data_java.csv -Append
     }
 }
 
 if ($go) {
-    if (Test-Path data_go.csv) {
-        Remove-Item data_go.csv
+    if (Test-Path BoyerAlgorithm\data_go.csv) {
+        Remove-Item BoyerAlgorithm\data_go.csv
     }
 
     for ($i = 0; $i -lt 6; $i += 1) {
@@ -69,8 +71,8 @@ if ($go) {
                        -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\go\BoyerAlgorithm\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" | 
-                                                    Out-File data_go.csv -Append
+	    ..\go\BoyerAlgorithm\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" $multiplier $num | 
+                                                    Out-File BoyerAlgorithm\data_go.csv -Append
 	    }
 }
 
