@@ -50,40 +50,29 @@
 //}
 
 int measure(const char *orig, const char *pat, bool parallel, int num) {
-	long int start;
-	int elapsed = 0;
 	std::vector<int> l;
 
 	MatchAbleString str(orig);
 
+	long int start = GetTickCount();	// mérés indul 
+
 	for (int i = 0; i < 5 * num; i++) {
 		Pattern p(pat);
-
-		start = GetTickCount();
+	
 		p.preprocess();
 		l = str.match(p, parallel);
-		elapsed += GetTickCount() - start;
-
-		//std::cout << "Matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
-		//std::cout << "Found " << l.size() << " occurrences." << std::endl;
-	/*	char *szo = new char[strlen(pat) + 1];
-		strncpy(szo, orig + l.front(), strlen(pat));
-		szo[strlen(pat)] = '\0';
-		std::cout << l.front() << ": " << szo << "\n" <<std::endl;
-		delete[] szo;*/
 	}
+
+	int elapsed = GetTickCount() - start;	// mérés vége
 
 	/*std::cout << (parallel ? "Parallel" : "Single thread") << " matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
 	std::cout << "Found " << l.size() << " matches." << std::endl;*/
-	/*for (int i = 0; i < l.size(); i++) {
-		std::cout << l[i] << " ";
-	}
-	std::cout << std::endl;*/
+
 	return elapsed / 5;
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
+
 #if defined _M_IX86
 	std::string path = "..\\..\\..\\resources\\";
 #elif defined _M_X64
@@ -105,15 +94,6 @@ int main(int argc, char **argv)
 	buffer[length] = '\0';
 	t.close();                    // close file handle
 
-	/*int i = 1;
-	for (char *c = buffer; *c != '\0'; c++, i++) {
-		std::cout << i << ". " << (int)*c << ": " << *c << std::endl;
-	}*/
-
-	 
-    //const char *buffer = "i had to, Hence, i peed the fence. i don't see the adHence ";
-	//size_t length = strlen(buffer);
-
 	size_t tmp = (length + 1) * 64 + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
@@ -132,16 +112,6 @@ int main(int argc, char **argv)
 	std::cout << measure(orig, argv[2], true, 1000) << std::endl;
 
 	delete[] orig;
-
-	/*char c;
-	std::cin >> c;*/
-
-	/*if (c == 'w') {
-		std::ofstream fil;
-		fil.open("bla.txt", std::ios_base::out);
-		fil << orig;
-		fil.close();
-	}*/
 
 	return 0;
 }
