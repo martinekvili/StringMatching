@@ -35,19 +35,22 @@ namespace BoyerAlgorithm
 
 	        MatchAbleString str = new MatchAbleString(orig);
 
-	        for (int i = 0; i < 5 * num; i++) {
-		        Pattern p = new Pattern(pat);
+            sw.Start();     // mérés indul
 
-                sw.Start();
+	        for (int i = 0; i < 5 * num; i++) 
+            {
+		        Pattern p = new Pattern(pat);
+  
 		        p.PreProcess();
 		        l = str.Match(p, parallel);
-                sw.Stop();
 	        }
+
+            sw.Stop();      // mérés vége
+            long elapsed = sw.ElapsedMilliseconds;
 
             //Console.WriteLine((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s " + (elapsed % 1000) + " ms");
             //Console.WriteLine("Found " + l.Count + " matches.");
 
-            long elapsed = sw.ElapsedMilliseconds;
 	        return elapsed / 5;
         }
 
