@@ -23,7 +23,7 @@ void MatchAbleString::preprocess(bool parallel) {
 		return strcmp(original + one, original + other) < 0;
 	};
 
-	if (parallel) {
+	if (!parallel) {
 		std::sort(substringArray, substringArray + length, comp);
 	}
 	else {
