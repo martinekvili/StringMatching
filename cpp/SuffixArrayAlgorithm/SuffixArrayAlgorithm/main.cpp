@@ -1,11 +1,7 @@
-// MatchAbleString.cpp : Defines the entry point for the console application.
-//
-
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <Windows.h>
-#include <cstdlib>
 
 #include "matchablestring.h"
 
@@ -37,14 +33,14 @@ int measure(const char *orig, const char *pat, bool parallel, int num = 0) {
 
 void measureTextFromFile(int argc, char **argv) {
 
-	/*#if defined _M_IX86
+	#if defined _M_IX86
 		std::string path = "..\\..\\..\\resources\\";
 	#elif defined _M_X64
 		std::string path = "..\\..\\..\\..\\resources\\";
-	#endif*/
+	#endif
 
-	//path += argv[1];
-	std::string path = "..\\..\\..\\resources\\spacewrecked.txt";
+	path += argv[1];
+	//std::string path = "..\\..\\..\\resources\\spacewrecked.txt";
 
 	std::ifstream t;
 	t.open(path, std::ifstream::binary);      // open input file
@@ -78,9 +74,12 @@ void measureTextFromFile(int argc, char **argv) {
 	/*std::cout << measure(orig, argv[2], false) << ";";
 	std::cout << measure(orig, argv[2], true) << std::endl;*/
 	std::cout << measure(orig, "bla", false) << ";";
-	//std::cout << measure(orig, "bla", true) << std::endl;
+	std::cout << measure(orig, "bla", true) << std::endl;
 
 	delete[] orig;
+
+	char c;
+	std::cin >> c;
 }
 
 void measureSimple() {

@@ -21,7 +21,7 @@
     <ClInclude Include="matchablestring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stringsorter.h">
+    <ClInclude Include="mergesort.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,9 +33,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="matchablestring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stringsorter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

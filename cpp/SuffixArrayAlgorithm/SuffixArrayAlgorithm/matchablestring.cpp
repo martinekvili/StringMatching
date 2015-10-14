@@ -19,7 +19,16 @@ MatchAbleString::~MatchAbleString() {
 }
 
 void MatchAbleString::preprocess(bool parallel) {
-	StringSorter::sort(original, substringArray, length, parallel ? 3 : 0);
+	auto comp = [this](int one, int other) {
+		return strcmp(original + one, original + other) < 0;
+	};
+
+	if (parallel) {
+		std::sort(substringArray, substringArray + length, comp);
+	}
+	else {
+		MergeSort<int>::parallelSort(substringArray, length, comp);
+	}
 }
 
 int MatchAbleString::binarySearch(int min, int max, const char *pattern, const std::unique_ptr<ComparerBase>& comparer) const {

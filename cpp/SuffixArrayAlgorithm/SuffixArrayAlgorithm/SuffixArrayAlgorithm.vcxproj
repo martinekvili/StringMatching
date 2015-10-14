@@ -152,13 +152,12 @@
   <ItemGroup>
     <ClInclude Include="comparers.h" />
     <ClInclude Include="matchablestring.h" />
-    <ClInclude Include="stringsorter.h" />
+    <ClInclude Include="mergesort.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="comparers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matchablestring.cpp" />
-    <ClCompile Include="stringsorter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

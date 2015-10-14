@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "comparers.h"
-#include "stringsorter.h"
+#include "mergesort.hpp"
 
 class MatchAbleString
 {
