@@ -83,7 +83,11 @@ namespace BoyerAlgorithm
 	        }
 	        else 
             {
+                // Using parallel for
                 Parallel.For(0, parts, i => occurrencesArray[i] = matchSubstr(p, parts, i));
+
+                // Using P-LINQ
+                //Enumerable.Range(0, parts).AsParallel().ForAll(i => occurrencesArray[i] = matchSubstr(p, parts, i));
 	        }
 
 	        List<int> occurrences = new List<int>();
