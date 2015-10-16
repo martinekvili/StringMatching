@@ -9,40 +9,26 @@ namespace SuffixArrayAlgorithm
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void measureSimple()
         {
-            int[] arr = new int[10000000];
-            Stopwatch sw = new Stopwatch();
-            Random r = new Random();
+            string orig = "i had to, Hence, i peed the fence. i don't see the adHence";
+            MatchAbleString sm = new MatchAbleString(orig);
+            sm.PreProcess(true);
 
-            for (int i = 0; i < arr.Length; i++)
+            string pat = "ence";
+            List<int> h = sm.Match(pat);
+
+            foreach (var i in h)
             {
-                arr[i] = r.Next(1000);
+                Console.WriteLine(i + " : " + orig.Substring(i, pat.Length));
             }
 
-            sw.Start();
-
-            //Array.Sort(arr);
-            MergeSort<int>.ParallelSort(arr, (int one, int other) =>
-            {
-                if (one < other)
-                {
-                    return -1;
-                }
-                else if (one > other)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            });
-
-            sw.Stop();
-
-            Console.WriteLine(sw.ElapsedMilliseconds);
             Console.ReadKey();
+        }
+
+        static void Main(string[] args)
+        {
+            measureSimple();
         }
     }
 }

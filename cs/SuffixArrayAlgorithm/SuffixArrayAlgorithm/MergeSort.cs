@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SuffixArrayAlgorithm
 {
-    class MergeSort<T>
+    public class MergeSort<T>
     {
         private class Comparer : IComparer<T>
         {
