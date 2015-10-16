@@ -14,6 +14,7 @@ private:
 	char *original;
 	int *substringArray;
 	int length;
+	bool isPreProcessed;
 
 	int binarySearch(int min, int max, const std::unique_ptr<ComparerBase>& comparer) const;
 

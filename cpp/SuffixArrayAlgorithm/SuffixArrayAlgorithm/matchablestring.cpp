@@ -11,6 +11,8 @@ MatchAbleString::MatchAbleString(const char *orig) {
 	{
 		substringArray[i] = i;
 	}
+
+	isPreProcessed = false;
 }
 
 MatchAbleString::~MatchAbleString() {
@@ -29,6 +31,8 @@ void MatchAbleString::preprocess(bool parallel) {
 	else {
 		MergeSort<int>::parallelSort(substringArray, length, comp);
 	}
+
+	isPreProcessed = true;
 }
 
 int MatchAbleString::binarySearch(int min, int max, const std::unique_ptr<ComparerBase>& comparer) const {
@@ -51,6 +55,10 @@ int MatchAbleString::binarySearch(int min, int max, const std::unique_ptr<Compar
 }
 
 std::vector<int> MatchAbleString::match(const char *pattern) const {
+	if (!isPreProcessed) {
+		throw std::runtime_error("This MatchAbleString hasn't been preprocessed yet!");
+	}
+
 	std::unique_ptr<ComparerBase> foc = std::make_unique<FirstOccurenceComparer>(original, pattern, substringArray, length);
 	std::unique_ptr<ComparerBase> loc = std::make_unique<LastOccurenceComparer>(original, pattern, substringArray, length);
 
