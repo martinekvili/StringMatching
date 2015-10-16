@@ -10,6 +10,7 @@ namespace SuffixArrayAlgorithm
     {
         private string original;
         private int[] substringArray;
+        private bool isPreProcessed;
 
         private int binarySearch(int min, int max, ComparerBase comparer)
         {
@@ -24,7 +25,7 @@ namespace SuffixArrayAlgorithm
                 case 1:
                     return binarySearch(min, num, comparer);
                 default:
-                    throw new InvalidOperationException("Not possible to get here - theoretically.");
+                    throw new NotImplementedException("Not possible to get here - theoretically.");
             }
         }
 
@@ -37,6 +38,8 @@ namespace SuffixArrayAlgorithm
             {
                 substringArray[i] = i;
             }
+
+            isPreProcessed = false;
         }
 
         public void PreProcess(bool parallel = false)
@@ -51,10 +54,17 @@ namespace SuffixArrayAlgorithm
             {
                 MergeSort.ParallelSort(substringArray, comp);
             }
+
+            isPreProcessed = true;
         }
 
         public List<int> Match(string pattern)
         {
+            if (!isPreProcessed)
+            {
+                throw new InvalidOperationException("This MatchAbleString hasn't been preprocessed yet!");
+            }
+
             ComparerBase foc = new FirstOccurenceComparer(original, pattern, substringArray);
             ComparerBase loc = new LastOccurenceComparer(original, pattern, substringArray);
 
