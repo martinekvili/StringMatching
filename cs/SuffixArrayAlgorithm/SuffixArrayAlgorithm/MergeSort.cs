@@ -6,33 +6,31 @@ using System.Threading.Tasks;
 
 namespace SuffixArrayAlgorithm
 {
-    public class MergeSort<T>
+    public class MergeSort
     {
-        private class Comparer : IComparer<T>
+        public class Comparer : IComparer<int>
         {
-            private Comparator comp;
+            private string str;
 
-            public Comparer(Comparator c)
+            public Comparer(string s)
             {
-                comp = c;
+                str = s;
             }
 
-            public int Compare(T x, T y)
+            public int Compare(int x, int y)
             {
-                return comp(x, y);
+                return String.Compare(str, x, str, y, str.Length);
             }
         }
 
-        private static readonly int mergeTreshold = 1250000;
-        private static readonly int sortTreshold = 1250000;
+        private static readonly int mergeTreshold = 8192;
+        private static readonly int sortTreshold = 48;
 
-        public delegate int Comparator(T one, T other);
-
-        private static void sequentialMerge(T[] arr1, int start1, int end1, T[] arr2, int start2, int end2, T[] dst, int start_dst, Comparator comp)
+        private static void sequentialMerge(int[] arr1, int start1, int end1, int[] arr2, int start2, int end2, int[] dst, int start_dst, IComparer<int> comp)
         {
             while (start1 != end1 && start2 != end2)
             {
-                if (comp(arr1[start1], arr2[start2]) < 0)
+                if (comp.Compare(arr1[start1], arr2[start2]) < 0)
                 {
                     dst[start_dst] = arr1[start1];
                     start1++;
@@ -60,23 +58,23 @@ namespace SuffixArrayAlgorithm
             }
         }
 
-        private static void swap<U>(ref U one, ref U other)
+        private static void swapInt(ref int one, ref int other)
         {
-            U tmp = one;
+            int tmp = one;
             one = other;
             other = tmp;
         }
 
-        private static void parallelMerge(T[] arr, int start1, int end1, int start2, int end2, T[] dst, int pos, Comparator comptor, IComparer<T> comparer)
+        private static void parallelMerge(int[] arr, int start1, int end1, int start2, int end2, int[] dst, int pos, IComparer<int> comparer)
         {
             int length1 = end1 - start1;
             int length2 = end2 - start2;
 
             if (length1 < length2)
             {
-                swap(ref start1, ref start2);
-                swap(ref end1, ref end2);
-                swap(ref length1, ref length2);
+                swapInt(ref start1, ref start2);
+                swapInt(ref end1, ref end2);
+                swapInt(ref length1, ref length2);
             }
 
             if (length1 == 0)
@@ -86,7 +84,7 @@ namespace SuffixArrayAlgorithm
 
             if ((length1 + length2) < mergeTreshold)
             {
-                sequentialMerge(arr, start1, end1, arr, start2, end2, dst, pos, comptor);
+                sequentialMerge(arr, start1, end1, arr, start2, end2, dst, pos, comparer);
             }
             else
             {
@@ -100,13 +98,13 @@ namespace SuffixArrayAlgorithm
                 dst[xpos_dst] = arr[xpos1];
 
                 Parallel.Invoke(
-                    () => { parallelMerge(arr, start1, xpos1, start2, xpos2, dst, pos, comptor, comparer); },
-                    () => { parallelMerge(arr, xpos1 + 1, end1, xpos2, end2, dst, xpos_dst + 1, comptor, comparer); }
+                    () => { parallelMerge(arr, start1, xpos1, start2, xpos2, dst, pos, comparer); },
+                    () => { parallelMerge(arr, xpos1 + 1, end1, xpos2, end2, dst, xpos_dst + 1, comparer); }
                     );
             }
         }
 
-        static void parallelSort(T[] src, int start, int end, T[] dest, Comparator comptor, IComparer<T> comparer, bool srcToDest = false)
+        static void parallelSort(int[] src, int start, int end, int[] dest, IComparer<int> comparer, bool srcToDest = false)
         {
             if (start == end)
             {
@@ -130,25 +128,25 @@ namespace SuffixArrayAlgorithm
 
             int middle = (start + end) / 2;
             Parallel.Invoke(
-                () => { parallelSort(src, start, middle, dest, comptor, comparer, !srcToDest); },
-                () => { parallelSort(src, middle, end, dest, comptor, comparer, !srcToDest); }
+                () => { parallelSort(src, start, middle, dest, comparer, !srcToDest); },
+                () => { parallelSort(src, middle, end, dest, comparer, !srcToDest); }
                 );
 
             if (srcToDest)
             {
-                parallelMerge(src, start, middle, middle, end, dest, start, comptor, comparer);
+                parallelMerge(src, start, middle, middle, end, dest, start, comparer);
             }
             else
             {
-                parallelMerge(dest, start, middle, middle, end, src, start, comptor, comparer);
+                parallelMerge(dest, start, middle, middle, end, src, start, comparer);
             }
         }
 
-        public static void ParallelSort(T[] arr, Comparator comptor)
+        public static void ParallelSort(int[] arr, IComparer<int> comparer)
         {
-            T[] acc = new T[arr.Length];
+            int[] acc = new int[arr.Length];
 
-            parallelSort(arr, 0, arr.Length, acc, comptor, new Comparer(comptor));
+            parallelSort(arr, 0, arr.Length, acc, comparer);
         }
 
 

@@ -41,18 +41,15 @@ namespace SuffixArrayAlgorithm
 
         public void PreProcess(bool parallel = false)
         {
-            MergeSort<int>.Comparator comp = (int one, int other) =>
-            {
-                return String.Compare(original, one, original, other, original.Length);
-            };
+            IComparer<int> comp = new MergeSort.Comparer(original);
 
             if (!parallel)
             {
-                //Array.Sort(substringArray);
+                Array.Sort(substringArray, comp);
             }
             else
             {
-                MergeSort<int>.ParallelSort(substringArray, comp);
+                MergeSort.ParallelSort(substringArray, comp);
             }
         }
 
