@@ -9,7 +9,7 @@ int measure(const char *orig, const char *pat, bool parallel, int num = 0) {
 	long int start;
 	int elapsed = 0;
 
-	//std::vector<char*> l;
+	std::vector<int> l;
 
 	for (int i = 0; i < 5; i++) {
 		MatchAbleString sm(orig);
@@ -18,29 +18,31 @@ int measure(const char *orig, const char *pat, bool parallel, int num = 0) {
 		sm.preprocess(parallel);
 		elapsed += GetTickCount() - start;
 
+		l = sm.match(pat);
+
 		//for (int j = 0; j < num; j++) {
 		//	start = GetTickCount();
-		//	/*l = */sm.match(pat);
+		//	
 		//	elapsed += GetTickCount() - start;
 		//}
 
 	}
-	/*std::cout << "Preprocessing took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms\n" << std::endl;*/
+	std::cout << "Preprocessing took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
+	std::cout << "Occurrences found: " << l.size() << std::endl;
 
-	//std::cout << l.size() << std::endl;
 	return elapsed / 5;
 }
 
 void measureTextFromFile(int argc, char **argv) {
 
-	#if defined _M_IX86
-		std::string path = "..\\..\\..\\resources\\";
-	#elif defined _M_X64
-		std::string path = "..\\..\\..\\..\\resources\\";
-	#endif
+	//#if defined _M_IX86
+	//	std::string path = "..\\..\\..\\resources\\";
+	//#elif defined _M_X64
+	//	std::string path = "..\\..\\..\\..\\resources\\";
+	//#endif
 
-	path += argv[1];
-	//std::string path = "..\\..\\..\\resources\\spacewrecked.txt";
+	//path += argv[1];
+	std::string path = "..\\..\\..\\resources\\spacewrecked.txt";
 
 	std::ifstream t;
 	t.open(path, std::ifstream::binary);      // open input file
@@ -55,10 +57,12 @@ void measureTextFromFile(int argc, char **argv) {
 	buffer[length] = '\0';
 	t.close();                    // close file handle
 
-	size_t tmp = (length + 1) * 4 + 1;
+	int multiplier = 1;
+
+	size_t tmp = (length + 1) * multiplier + 1;
 	char *orig = new char[tmp];
 	orig[0] = '\0';
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < multiplier; i++) {
 		strcat_s(orig, tmp, buffer);
 	}
 
@@ -73,8 +77,8 @@ void measureTextFromFile(int argc, char **argv) {
 
 	/*std::cout << measure(orig, argv[2], false) << ";";
 	std::cout << measure(orig, argv[2], true) << std::endl;*/
-	std::cout << measure(orig, "bla", false) << ";";
-	std::cout << measure(orig, "bla", true) << std::endl;
+	std::cout << measure(orig, "plentifully", false) << ";";
+	std::cout << measure(orig, "plentifully", true) << std::endl;
 
 	delete[] orig;
 

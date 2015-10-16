@@ -39,10 +39,10 @@ namespace SuffixArrayAlgorithm
             sw.Stop();      // mérés vége
             long elapsed = sw.ElapsedMilliseconds;
 
-            //var l = str.Match(pat);
+            var l = str.Match(pat);
 
             Console.WriteLine((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s " + (elapsed % 1000) + " ms");
-            //Console.WriteLine("Found " + l.Count + " matches.");
+            Console.WriteLine("Found " + l.Count + " matches.");
 
             return elapsed;
         }
@@ -78,6 +78,7 @@ namespace SuffixArrayAlgorithm
             //measureSimple();
 
             measureFileRead(args);
+            Console.ReadKey();
         }
     }
 }
