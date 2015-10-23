@@ -34,7 +34,7 @@ namespace SuffixArrayAlgorithm
                 return checkIfValid(num);
             }
         }
-    };
+    }
 
     public class FirstOccurenceComparer : ComparerBase
     {
@@ -51,7 +51,7 @@ namespace SuffixArrayAlgorithm
         }
 
         public FirstOccurenceComparer(string s, string p, int[] ssA) : base(s, p, ssA) { }
-    };
+    }
 
     public class LastOccurenceComparer : ComparerBase
     {
@@ -68,6 +68,6 @@ namespace SuffixArrayAlgorithm
         }
 
         public LastOccurenceComparer(string s, string p, int[] ssA) : base(s, p, ssA) { }
-    };
+    }
 
 }
