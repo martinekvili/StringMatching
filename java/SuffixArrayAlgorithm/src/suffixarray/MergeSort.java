@@ -17,8 +17,7 @@ public class MergeSort {
 
 		@Override
 		public int compare(Integer o1, Integer o2) {
-			// return String.compare(str, x, str, y, str.length());
-			return o1.compareTo(o2);
+			return StringHelper.compare(str, o1.intValue(), str, o2.intValue(), str.length());
 		}
 	}
 
@@ -55,18 +54,18 @@ public class MergeSort {
 			Comparator<Integer> comparer, ExecutorService executor) {
 		int length1 = end1 - start1;
 		int length2 = end2 - start2;
-		
+
 		if (length1 < length2) {
 			int tmp;
-			
+
 			tmp = start1;
 			start1 = start2;
 			start2 = tmp;
-			
+
 			tmp = end1;
 			end1 = end2;
 			end2 = tmp;
-			
+
 			tmp = length1;
 			length1 = length2;
 			length2 = tmp;
@@ -97,9 +96,11 @@ public class MergeSort {
 			final int end2_f = end2;
 			final int xpos2_f = xpos2; // Csak hogy használhassuk enclosing
 										// scope-on belül
-			
-//			parallelMerge(arr, start1_f, xpos1, start2_f, xpos2_f, dst, pos, comparer, executor);
-//			parallelMerge(arr, xpos1 + 1, end1_f, xpos2_f, end2_f, dst, xpos_dst + 1, comparer, executor);
+
+			// parallelMerge(arr, start1_f, xpos1, start2_f, xpos2_f, dst, pos,
+			// comparer, executor);
+			// parallelMerge(arr, xpos1 + 1, end1_f, xpos2_f, end2_f, dst,
+			// xpos_dst + 1, comparer, executor);
 
 			List<Callable<Object>> tasks = Arrays.asList(Executors.callable(() -> {
 				parallelMerge(arr, start1_f, xpos1, start2_f, xpos2_f, dst, pos, comparer, executor);
