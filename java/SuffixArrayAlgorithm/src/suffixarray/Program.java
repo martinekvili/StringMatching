@@ -2,24 +2,26 @@ package suffixarray;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
 public class Program {
 
-	private static void measureSimple() {
-		String orig = "i had to, Hence, i peed the fence. i don't see the adHence";
-		MatchAbleString sm = new MatchAbleString(orig);
-		sm.preProcess(true);
-
-		String pat = "ence";
-		List<Integer> h = sm.match(pat);
-
-		for (Integer i : h) {
-			System.out.println(i + " : " + orig.substring(i, i + pat.length()));
-		}
-	}
+	// private static void measureSimple() {
+	// String orig = "i had to, Hence, i peed the fence. i don't see the
+	// adHence";
+	// MatchAbleString sm = new MatchAbleString(orig);
+	// sm.preProcess(true);
+	//
+	// String pat = "ence";
+	// List<Integer> h = sm.match(pat);
+	//
+	// for (Integer i : h) {
+	// System.out.println(i + " : " + orig.substring(i, i + pat.length()));
+	// }
+	// }
 
 	static private long measure(String orig, String pat, boolean parallel, int num) {
 		// @SuppressWarnings("unused")
@@ -43,13 +45,11 @@ public class Program {
 	}
 
 	private static void measureFileRead(String[] args) {
-//		String path = "..\\resources\\" + args[0];
-		 String path = "..\\..\\resources\\spacewrecked.txt";
+		// String path = "..\\resources\\" + args[0];
+		String path = "..\\..\\resources\\spacewrecked.txt";
+		StringBuilder sb = new StringBuilder();
 
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(new File(path)));
-			StringBuilder sb = new StringBuilder();
+		try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
 			while (reader.ready()) {
 				sb.append(reader.readLine());
 				sb.append('\n');
@@ -73,15 +73,8 @@ public class Program {
 			System.out.println(measure(orig, "plentifully", false, 1) + ";");
 			System.out.println(measure(orig, "plentifully", true, 1) + ";");
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 

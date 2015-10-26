@@ -51,9 +51,7 @@ public class Program {
 		String path = "..\\resources\\" + args[0];
 		// String path = "..\\resources\\spacewrecked.txt";
 
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(new File(path)));
+		try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
 			StringBuilder sb = new StringBuilder();
 			while (reader.ready()) {
 				sb.append(reader.readLine());
@@ -79,14 +77,6 @@ public class Program {
 			// ";");
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 }
