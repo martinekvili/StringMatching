@@ -6,31 +6,22 @@
 #include "matchablestring.h"
 
 int measure(const char *orig, const char *pat, bool parallel, int num = 0) {
-	long int start;
-	int elapsed = 0;
-
 	std::vector<int> l;
 
+	long int start = GetTickCount();
+
 	for (int i = 0; i < 5; i++) {
-		MatchAbleString sm(orig);
-
-		start = GetTickCount();
+		MatchAbleString sm(orig);	
 		sm.preprocess(parallel);
-		elapsed += GetTickCount() - start;
-
 		l = sm.match(pat);
-
-		//for (int j = 0; j < num; j++) {
-		//	start = GetTickCount();
-		//	
-		//	elapsed += GetTickCount() - start;
-		//}
-
 	}
+
+	long int elapsed = (GetTickCount() - start) / 5;
+
 	std::cout << "Preprocessing took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
 	std::cout << "Occurrences found: " << l.size() << std::endl;
 
-	return elapsed / 5;
+	return elapsed;
 }
 
 void measureTextFromFile(int argc, char **argv) {
@@ -42,7 +33,7 @@ void measureTextFromFile(int argc, char **argv) {
 	//#endif
 
 	//path += argv[1];
-	std::string path = "..\\..\\..\\resources\\spacewrecked.txt";
+	std::string path = "..\\..\\..\\resources\\new\\ulysses.txt";
 
 	std::ifstream t;
 	t.open(path, std::ifstream::binary);      // open input file
@@ -77,8 +68,8 @@ void measureTextFromFile(int argc, char **argv) {
 
 	/*std::cout << measure(orig, argv[2], false) << ";";
 	std::cout << measure(orig, argv[2], true) << std::endl;*/
-	std::cout << measure(orig, "plentifully", false) << ";";
-	std::cout << measure(orig, "plentifully", true) << std::endl;
+	std::cout << measure(orig, "alrightness", false) << ";";
+	std::cout << measure(orig, "alrightness", true) << std::endl;
 
 	delete[] orig;
 

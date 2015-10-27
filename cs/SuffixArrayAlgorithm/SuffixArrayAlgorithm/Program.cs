@@ -50,27 +50,15 @@ namespace SuffixArrayAlgorithm
         private static void measureFileRead(string[] args)
         {
             //string path = "..\\resources\\" + args[0];
-            string path = "..\\..\\..\\..\\..\\resources\\spacewrecked.txt";
-            string str = File.ReadAllText(path);
-
-            //int multiplier = Int32.Parse(args[2]);
-            //int num = Int32.Parse(args[3]);
-            int multiplier = 1;
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < multiplier; i++)
-            {
-                sb.Append(str);
-            }
-
-            string orig = sb.ToString();
+            string path = @"..\..\..\..\..\resources\new\ulysses.txt";
+            string orig = File.ReadAllText(path);
 
             Console.Write(orig.Length + ";");
 
             //Console.Write(measure(orig, args[1], false, num) + ";");
             //Console.WriteLine(measure(orig, args[1], true, num) + ";");
-            Console.Write(measure(orig, "plentifully", false, 1000) + ";");
-            Console.WriteLine(measure(orig, "plentifully", true, 1000) + ";");
+            Console.Write(measure(orig, "alrightness", false, 1) + ";");
+            Console.WriteLine(measure(orig, "alrightness", true, 1) + ";");
         }
 
         static void Main(string[] args)
