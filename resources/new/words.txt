@@ -1,0 +1,2 @@
+pride.txt	-	intrepidity
+ulysses.txt	-	alrightness
