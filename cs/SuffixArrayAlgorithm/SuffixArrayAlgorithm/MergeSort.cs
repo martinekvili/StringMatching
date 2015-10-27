@@ -19,7 +19,7 @@ namespace SuffixArrayAlgorithm
 
             public int Compare(int x, int y)
             {
-                return String.Compare(str, x, str, y, str.Length);
+                return String.Compare(str, x, str, y, str.Length, StringComparison.Ordinal);
             }
         }
 
