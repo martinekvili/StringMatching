@@ -55,6 +55,7 @@ if ($java) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
+	    java -cp ..\java\SuffixArrayAlgorithm\bin\ suffixarray.Program $($resource.FileName) "$($resource.Word)" | 
                                                     Out-File SuffixArrayAlgorithm\data_java.csv -Append
         
         $i += 1
