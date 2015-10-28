@@ -4,28 +4,26 @@
     [switch] $java,
     [switch] $go)
 
-$multiplier = 1280
+$multiplier = 16
 $num = 50
 
-$files = ("bfranklin.txt", "dostoyevsky.txt", "jackrabbit.txt", "napoleon.txt", "dante.txt", "spacewrecked.txt")
-
-#$words = ( "fire mixed with water", "significant object at", "rappers from the rose",
-#               "almost immediately be", "ow a corpse they left", "retreat into the bush")
-
-$words = ("contiguity", "hereditary", "smithereen", "expressive", "forfeiture", "plentifull")
+$resources = Import-Csv -Delimiter ";" -Path ..\resources.csv
 
 if ($cpp) {
     if (Test-Path BoyerAlgorithm\data_cpp.csv) {
         Remove-Item BoyerAlgorithm\data_cpp.csv
     }
 
-    for ($i = 0; $i -lt 6; $i += 1) {
+    $i = 0
+    foreach ($resource in $resources) {
 	    Write-Progress -Activity "C++ matching" `
-                       -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
+                       -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cpp\BoyerAlgorithm\x64\Release\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" $multiplier $num | 
+	    ..\cpp\BoyerAlgorithm\x64\Release\BoyerAlgorithm.exe $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                      Out-File BoyerAlgorithm\data_cpp.csv -Append
+        
+        $i += 1
     }
 
     Write-Progress -Activity "C++ matching" -Completed
@@ -36,13 +34,16 @@ if ($cs) {
         Remove-Item BoyerAlgorithm\data_cs.csv
     }
 
-    for ($i = 0; $i -lt 6; $i += 1) {
+    $i = 0
+    foreach ($resource in $resources) {
 	    Write-Progress -Activity "C# matching" `
-                       -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
+                       -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cs\BoyerAlgorithm\BoyerAlgorithm\bin\Release\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" $multiplier $num | 
+	    ..\cs\BoyerAlgorithm\BoyerAlgorithm\bin\Release\BoyerAlgorithm.exe $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                     Out-File BoyerAlgorithm\data_cs.csv -Append
+
+        $i += 1
     }
 }
 
@@ -51,13 +52,16 @@ if ($java) {
         Remove-Item BoyerAlgorithm\data_java.csv
     }
 
-    for ($i = 0; $i -lt 6; $i += 1) {
+    $i = 0
+    foreach ($resource in $resources) {
 	    Write-Progress -Activity "Java matching" `
-                       -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
+                       -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    java -cp ..\java\BoyerAlgorithm\bin\ boyer.Program $($files[$i]) "$($words[$i])" $multiplier $num | 
+	    java -cp ..\java\BoyerAlgorithm\bin\ boyer.Program $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                     Out-File BoyerAlgorithm\data_java.csv -Append
+        
+        $i += 1
     }
 }
 
@@ -66,14 +70,17 @@ if ($go) {
         Remove-Item BoyerAlgorithm\data_go.csv
     }
 
-    for ($i = 0; $i -lt 6; $i += 1) {
+    $i = 0
+    foreach ($resource in $resources) {
 	    Write-Progress -Activity "Go matching" `
-                       -CurrentOperation "String matching on file $($files[$i]) with word `"$($words[$i])`"" `
+                       -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\go\BoyerAlgorithm\BoyerAlgorithm.exe $($files[$i]) "$($words[$i])" $multiplier $num | 
+	    ..\go\BoyerAlgorithm\BoyerAlgorithm.exe $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                     Out-File BoyerAlgorithm\data_go.csv -Append
-	    }
+        
+        $i += 1
+    }
 }
 
 Write-Host -ForegroundColor Green "All measurements DONE."
