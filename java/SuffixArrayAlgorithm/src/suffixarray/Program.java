@@ -22,13 +22,13 @@ public class Program {
 	// }
 	// }
 
-	static private long measure(String orig, String pat, boolean parallel, int num) {
-		// @SuppressWarnings("unused")
+	static private long measure(String orig, String pat, boolean parallel) {
+		@SuppressWarnings("unused")
 		List<Integer> l = null;
 
 		long startTime = System.nanoTime(); // mérés kezdete
 
-		for (int i = 0; i < 5 * num; i++) {
+		for (int i = 0; i < 5; i++) {
 			MatchAbleString str = new MatchAbleString(orig);
 			str.preProcess(parallel);
 			l = str.match(pat);
@@ -37,15 +37,14 @@ public class Program {
 		long elapsed = (System.nanoTime() - startTime) / 1000000 / 5; // mérés
 																		// vége
 
-		System.out.println((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s "
-				+ (elapsed % 1000) + " ms");
-		System.out.println("Found " + l.size() + " matches.");
+//		System.out.println((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s "
+//				+ (elapsed % 1000) + " ms");
+//		System.out.println("Found " + l.size() + " matches.");
 		return elapsed;
 	}
 
 	private static void measureFileRead(String[] args) {
-		// String path = "..\\resources\\" + args[0];
-		String path = "..\\..\\resources\\new\\ulysses.txt";
+		String path = "..\\resources\\" + args[0];
 
 		String orig = null;
 
@@ -66,10 +65,10 @@ public class Program {
 		if (orig != null) {
 			System.out.print(orig.length() + ";");
 
-			// System.out.print(measure(orig, args[1], false, num) + ";");
-			// System.out.println(measure(orig, args[1], true, num) + ";");
-			System.out.println(measure(orig, "alrightness", false, 1) + ";");
-			System.out.println(measure(orig, "alrightness", true, 1) + ";");
+			System.out.print(measure(orig, args[1], false) + ";");
+			System.out.println(measure(orig, args[1], true) + ";");
+//			System.out.println(measure(orig, "alrightness", false, 1) + ";");
+//			System.out.println(measure(orig, "alrightness", true, 1) + ";");
 		}
 	}
 

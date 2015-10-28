@@ -21,8 +21,8 @@ public class MergeSort {
 		}
 	}
 
-	private static final int mergeTreshold = 8192;
-	private static final int sortTreshold = 8192;
+	private static final int mergeTreshold = 16384;
+	private static final int sortTreshold = 16384;
 
 	private static void sequentialMerge(Integer[] arr1, int start1, int end1, Integer[] arr2, int start2, int end2,
 			Integer[] dst, int start_dst, Comparator<Integer> comp) {

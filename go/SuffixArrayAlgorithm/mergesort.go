@@ -64,7 +64,7 @@ func parallelMerge(arr1 []string, arr2 []string, dst []string, ch chan int) {
 
 func parallelSort(src []string, dst []string, srcToDest bool, ch chan int) {
 	if len(src) > 0 {
-		if len(src) < 48 {
+		if len(src) < 1024 {
 			sort.Strings(src)
 
 			if srcToDest {

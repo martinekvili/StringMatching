@@ -9,42 +9,32 @@ import (
 	"time"
 )
 
-func measure(original string, pattern string, parallel bool, num int) int {
-	var start time.Time
-	var took int64
+func measure(original string, pattern string, parallel bool) int {
 	//var occs []int
+
+	start := time.Now()
 
 	for db := 0; db < 5; db++ {
 		var s MatchAbleString
 		s.SetString(original)
 
-		start = time.Now()
 		s.PreProcess(parallel)
-		took += time.Since(start).Nanoseconds() / 1000000
-
-		for i := 0; i < num; i++ {
-			/*occs = */ s.Match(pattern)
-		}
+		s.Match(pattern)
 	}
 
+	took := time.Since(start).Nanoseconds() / 1000000 / 5
 	//fmt.Printf("Found %v occurrences.\n", len(occs))
 
-	return int(took / 5)
+	return int(took)
 }
 
 func MeasureReadFile() {
-	bytes, err := ioutil.ReadFile("..\\..\\resources\\" + os.Args[1])
+	bytes, err := ioutil.ReadFile("..\\resources\\" + os.Args[1])
 
 	if err != nil {
 		fmt.Print("No such file")
 		return
 	}
-
-	/*num, err2 := strconv.Atoi(os.Args[3])
-	if err2 != nil {
-		fmt.Print("Bad number")
-		return
-	}*/
 
 	original := string(bytes)
 
@@ -52,8 +42,8 @@ func MeasureReadFile() {
 
 	//fmt.Printf("%v;", num)
 
-	fmt.Printf("%v;", measure(original, os.Args[2], false, 1))
-	fmt.Printf("%v\n", measure(original, os.Args[2], true, 1))
+	fmt.Printf("%v;", measure(original, os.Args[2], false))
+	fmt.Printf("%v\n", measure(original, os.Args[2], true))
 }
 
 func MeasureSimple() {

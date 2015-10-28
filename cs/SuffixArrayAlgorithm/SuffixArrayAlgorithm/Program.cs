@@ -27,38 +27,39 @@ namespace SuffixArrayAlgorithm
             Console.ReadKey();
         }
 
-        static private long measure(string orig, string pat, bool parallel, int num)
+        static private long measure(string orig, string pat, bool parallel)
         {
             Stopwatch sw = new Stopwatch();
-            MatchAbleString str = new MatchAbleString(orig);
-
             sw.Start();     // mérés indul
 
-            str.PreProcess(parallel);
+            for (int i = 0; i < 5; i++)
+            {
+                MatchAbleString str = new MatchAbleString(orig);
+                str.PreProcess(parallel);
+                var l = str.Match(pat);
+            }
 
             sw.Stop();      // mérés vége
-            long elapsed = sw.ElapsedMilliseconds;
 
-            var l = str.Match(pat);
+            long elapsed = sw.ElapsedMilliseconds / 5;
 
-            Console.WriteLine((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s " + (elapsed % 1000) + " ms");
-            Console.WriteLine("Found " + l.Count + " matches.");
+            //Console.WriteLine((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s " + (elapsed % 1000) + " ms");
+            //Console.WriteLine("Found " + l.Count + " matches.");
 
             return elapsed;
         }
 
         private static void measureFileRead(string[] args)
         {
-            //string path = "..\\resources\\" + args[0];
-            string path = @"..\..\..\..\..\resources\new\ulysses.txt";
+            string path = @"..\resources\" + args[0];
             string orig = File.ReadAllText(path);
 
             Console.Write(orig.Length + ";");
 
-            //Console.Write(measure(orig, args[1], false, num) + ";");
-            //Console.WriteLine(measure(orig, args[1], true, num) + ";");
-            Console.Write(measure(orig, "alrightness", false, 1) + ";");
-            Console.WriteLine(measure(orig, "alrightness", true, 1) + ";");
+            Console.Write(measure(orig, args[1], false) + ";");
+            Console.WriteLine(measure(orig, args[1], true) + ";");
+            //Console.Write(measure(orig, "alrightness", false, 1) + ";");
+            //Console.WriteLine(measure(orig, "alrightness", true, 1) + ";");
         }
 
         static void Main(string[] args)
@@ -66,7 +67,7 @@ namespace SuffixArrayAlgorithm
             //measureSimple();
 
             measureFileRead(args);
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }
