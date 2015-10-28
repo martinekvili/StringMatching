@@ -24,10 +24,14 @@ namespace SuffixArrayAlgorithm
 
         public int Compare(int num)
         {
-            int comp = String.Compare(str, substringArray[num], pattern, 0, pattern.Length);
-            if (comp != 0)
+            int comp = String.Compare(str, substringArray[num], pattern, 0, pattern.Length, StringComparison.Ordinal);
+            if (comp < 0)
             {
-                return comp;
+                return -1;
+            }
+            else if (comp > 0)
+            {
+                return 1;
             }
             else
             {
@@ -40,7 +44,7 @@ namespace SuffixArrayAlgorithm
     {
         protected override int checkIfValid(int num)
         {
-            if (num == 0 || String.Compare(str, substringArray[num - 1], pattern, 0, pattern.Length) != 0)
+            if (num == 0 || String.Compare(str, substringArray[num - 1], pattern, 0, pattern.Length, StringComparison.Ordinal) != 0)
             {
                 return 0;
             }
@@ -57,7 +61,7 @@ namespace SuffixArrayAlgorithm
     {
         protected override int checkIfValid(int num)
         {
-            if (num == str.Length - 1 || String.Compare(str, substringArray[num + 1], pattern, 0, pattern.Length) != 0)
+            if (num == str.Length - 1 || String.Compare(str, substringArray[num + 1], pattern, 0, pattern.Length, StringComparison.Ordinal) != 0)
             {
                 return 0;
             }
