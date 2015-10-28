@@ -56,7 +56,7 @@ namespace BoyerAlgorithm
 
         static void Main(string[] args)
         {
-            string path = "..\\resources\\" + args[0];
+            string path = @"..\resources\" + args[0];
             //string path = "..\\resources\\spacewrecked.txt";
             string str = File.ReadAllText(path);
 
