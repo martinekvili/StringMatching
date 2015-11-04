@@ -2,10 +2,7 @@ package suffixarray;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 public class MergeSort {
 	static public class Comparer implements Comparator<Integer> {
@@ -21,8 +18,8 @@ public class MergeSort {
 		}
 	}
 
-	private static final int mergeTreshold = 16384;
-	private static final int sortTreshold = 16384;
+	private static final int mergeTreshold = 8192;
+	private static final int sortTreshold = 1024;
 
 	private static void sequentialMerge(Integer[] arr1, int start1, int end1, Integer[] arr2, int start2, int end2,
 			Integer[] dst, int start_dst, Comparator<Integer> comp) {
@@ -51,7 +48,7 @@ public class MergeSort {
 	}
 
 	private static void parallelMerge(Integer[] arr, int start1, int end1, int start2, int end2, Integer[] dst, int pos,
-			Comparator<Integer> comparer, ExecutorService executor) {
+			Comparator<Integer> comparer) {
 		int length1 = end1 - start1;
 		int length2 = end2 - start2;
 
@@ -97,28 +94,18 @@ public class MergeSort {
 			final int xpos2_f = xpos2; // Csak hogy használhassuk enclosing
 										// scope-on belül
 
-			// parallelMerge(arr, start1_f, xpos1, start2_f, xpos2_f, dst, pos,
-			// comparer, executor);
-			// parallelMerge(arr, xpos1 + 1, end1_f, xpos2_f, end2_f, dst,
-			// xpos_dst + 1, comparer, executor);
-
-			List<Callable<Object>> tasks = Arrays.asList(Executors.callable(() -> {
-				parallelMerge(arr, start1_f, xpos1, start2_f, xpos2_f, dst, pos, comparer, executor);
-			}), Executors.callable(() -> {
-				parallelMerge(arr, xpos1 + 1, end1_f, xpos2_f, end2_f, dst, xpos_dst + 1, comparer, executor);
-			}));
-
-			try {
-				executor.invokeAll(tasks);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			IntStream.range(0, 2).parallel().forEach(i -> {
+				if (i == 0) {
+					parallelMerge(arr, start1_f, xpos1, start2_f, xpos2_f, dst, pos, comparer);
+				} else {
+					parallelMerge(arr, xpos1 + 1, end1_f, xpos2_f, end2_f, dst, xpos_dst + 1, comparer);
+				}
+			});
 		}
 	}
 
 	private static void parallelSort(Integer[] src, int start, int end, Integer[] dest, Comparator<Integer> comparer,
-			boolean srcToDest, ExecutorService executor) {
+			boolean srcToDest) {
 		if (start == end) {
 			return;
 		}
@@ -137,34 +124,25 @@ public class MergeSort {
 
 		int middle = (start + end) / 2;
 
-		List<Callable<Object>> tasks = Arrays.asList(Executors.callable(() -> {
-			parallelSort(src, start, middle, dest, comparer, !srcToDest, executor);
-		}), Executors.callable(() -> {
-			parallelSort(src, middle, end, dest, comparer, !srcToDest, executor);
-		}));
-
-		try {
-			executor.invokeAll(tasks);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		IntStream.range(0, 2).parallel().forEach(i -> {
+			if (i == 0) {
+				parallelSort(src, start, middle, dest, comparer, !srcToDest);
+			} else {
+				parallelSort(src, middle, end, dest, comparer, !srcToDest);
+			}
+		});
 
 		if (srcToDest) {
-			parallelMerge(src, start, middle, middle, end, dest, start, comparer, executor);
+			parallelMerge(src, start, middle, middle, end, dest, start, comparer);
 		} else {
-			parallelMerge(dest, start, middle, middle, end, src, start, comparer, executor);
+			parallelMerge(dest, start, middle, middle, end, src, start, comparer);
 		}
 	}
 
 	public static void parallelSort(Integer[] arr, Comparator<Integer> comparer) {
 		Integer[] acc = new Integer[arr.length];
 
-		ExecutorService executor = Executors.newWorkStealingPool();
-
-		parallelSort(arr, 0, arr.length, acc, comparer, false, executor);
-
-		executor.shutdown();
+		parallelSort(arr, 0, arr.length, acc, comparer, false);
 	}
 
 }
