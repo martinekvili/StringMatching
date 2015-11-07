@@ -152,6 +152,7 @@
     <ClCompile Include="boyer\matchablestringb.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matchablestring.cpp" />
+    <ClCompile Include="matchablestrings.cpp" />
     <ClCompile Include="pattern.cpp" />
     <ClCompile Include="suffixarray\comparers.cpp" />
     <ClCompile Include="suffixarray\matchablestringsa.cpp" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="boyer\matchablestringb.h" />
     <ClInclude Include="matchablestring.h" />
+    <ClInclude Include="matchablestrings.h" />
     <ClInclude Include="pattern.h" />
     <ClInclude Include="suffixarray\comparers.h" />
     <ClInclude Include="suffixarray\matchablestringsa.h" />

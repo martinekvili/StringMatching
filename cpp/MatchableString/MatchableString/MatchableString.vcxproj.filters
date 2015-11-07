@@ -33,6 +33,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="matchablestrings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pattern.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="matchablestring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matchablestrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

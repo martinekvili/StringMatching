@@ -51,10 +51,10 @@ void Pattern::preprocess() {
 	preprocessed = true;
 }
 
-Pattern::Pattern(const char *c) {
-    length = (int) strlen(c);
+Pattern::Pattern(const std::string& s) {
+    length = (int) s.length();
     str = new char[length + 1];
-    strcpy_s(str, length + 1, c);
+    strcpy_s(str, length + 1, s.data());
 
     delta2 = new int[length];
 

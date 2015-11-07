@@ -3,6 +3,7 @@
 
 #include <cctype>
 #include <cstring>
+#include <string>
 
 class Pattern {
     unsigned int delta1[256];
@@ -19,7 +20,7 @@ class Pattern {
 	bool preprocessed;
 
 public:
-    Pattern(const char *c);
+    Pattern(const std::string& s);
     ~Pattern();
 
 	Pattern(const Pattern&) = delete;
