@@ -17,7 +17,7 @@ if ($cpp) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cpp\SuffixArrayAlgorithm\x64\Release\SuffixArrayAlgorithm.exe $($resource.FileName) "$($resource.Word)" | 
+	    ..\cpp\MatchableString\x64\Release\MatchableString.exe suffixarray $($resource.FileName) "$($resource.Word)" 1 1 | 
                                                      Out-File SuffixArrayAlgorithm\data_cpp.csv -Append
         
         $i += 1

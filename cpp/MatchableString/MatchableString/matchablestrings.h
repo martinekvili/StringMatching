@@ -10,8 +10,8 @@
 
 class MatchableStrings {
 public:
-	static std::unique_ptr<MatchableString> createBoyer(const std::string& s);
-	static std::unique_ptr<MatchableString> createSuffixArray(const std::string& s);
+	static std::unique_ptr<MatchableString> createBoyer(const char *s);
+	static std::unique_ptr<MatchableString> createSuffixArray(const char *s);
 };
 
 #endif
