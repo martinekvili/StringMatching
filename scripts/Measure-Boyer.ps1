@@ -58,7 +58,7 @@ if ($java) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    java -cp ..\java\BoyerAlgorithm\bin\ boyer.Program $($resource.FileName) "$($resource.Word)" $multiplier $num | 
+	    java -cp ..\java\MatchableString\out\production\MatchableString matchablestring.Program boyer $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                     Out-File BoyerAlgorithm\data_java.csv -Append
         
         $i += 1
