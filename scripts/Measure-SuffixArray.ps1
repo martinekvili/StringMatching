@@ -37,7 +37,7 @@ if ($cs) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cs\SuffixArrayAlgorithm\SuffixArrayAlgorithm\bin\Release\SuffixArrayAlgorithm.exe $($resource.FileName) "$($resource.Word)" | 
+	    ..\cs\MatchableString\MatchableString\bin\Release\MatchableString.exe suffixarray $($resource.FileName) "$($resource.Word)" 1 1 | 
                                                     Out-File SuffixArrayAlgorithm\data_cs.csv -Append
 
         $i += 1

@@ -40,7 +40,7 @@ if ($cs) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\cs\BoyerAlgorithm\BoyerAlgorithm\bin\Release\BoyerAlgorithm.exe $($resource.FileName) "$($resource.Word)" $multiplier $num | 
+	    ..\cs\MatchableString\MatchableString\bin\Release\MatchableString.exe boyer $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                     Out-File BoyerAlgorithm\data_cs.csv -Append
 
         $i += 1
