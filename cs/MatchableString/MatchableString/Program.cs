@@ -14,7 +14,7 @@ namespace MatchableString
 
         private static long measure(string orig, string pat, bool parallel, int matchNum, CreatorFunction func)
         {
-            List<int> l;
+            List<int> l = null;
             Stopwatch sw = new Stopwatch();
 
             sw.Start();                             // mérés indul 
@@ -32,11 +32,12 @@ namespace MatchableString
             }
 
             sw.Stop();	// mérés vége
+            long elapsed = sw.ElapsedMilliseconds / 5;
 
-            /*std::cout << (parallel ? "Parallel" : "Single thread") << " matching took " << elapsed / 1000 << " s " << elapsed % 1000 << " ms" << std::endl;
-            std::cout << "Found " << l.size() << " matches." << std::endl;*/
+            //Console.WriteLine((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s " + (elapsed % 1000) + " ms");
+            //Console.WriteLine("Found " + l.Count + " matches.");
 
-            return sw.ElapsedMilliseconds / 5;
+            return elapsed;
         }
 
         private static void measureReadFile(string[] args)
