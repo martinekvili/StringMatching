@@ -73,7 +73,7 @@ if ($go) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\go\SuffixArrayAlgorithm\SuffixArrayAlgorithm.exe $($resource.FileName) "$($resource.Word)" | 
+	    ..\go\MatchableString\MatchableString.exe suffixarray $($resource.FileName) "$($resource.Word)" 1 1 | 
                                                     Out-File SuffixArrayAlgorithm\data_go.csv -Append
         
         $i += 1

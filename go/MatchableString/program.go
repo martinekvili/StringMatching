@@ -13,7 +13,7 @@ type CreatorFunction func(string) MatchableString
 
 func Measure(str string, pattern string, parallel bool, num int, creator CreatorFunction) int {
 	start := time.Now() // mérés kezdete
-	var occ []int
+	//var occ []int
 
 	for db := 0; db < 5; db++ {
 		matchable := creator(str)
@@ -23,18 +23,18 @@ func Measure(str string, pattern string, parallel bool, num int, creator Creator
 		pat.SetString(pattern)
 
 		for m := 0; m < num; m++ {
-			occ = matchable.Match(&pat, parallel)
+			/*occ = */ matchable.Match(&pat, parallel)
 		}
 	}
 
 	took := time.Since(start).Nanoseconds() / 1000000 // mérés vége
 
-	if parallel {
+	/*if parallel {
 		fmt.Print("Parallel ")
 	} else {
 		fmt.Print("Single-thread ")
 	}
-	fmt.Printf("algorithm took %v ms, and found %v matches\n", took, len(occ))
+	fmt.Printf("algorithm took %v ms, and found %v matches\n", took, len(occ))*/
 
 	return int(took) / 5
 }

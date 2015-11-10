@@ -76,7 +76,7 @@ if ($go) {
                        -CurrentOperation "String matching on file $($resource.FileName) with word `"$($resource.Word)`"" `
                        -PercentComplete $($i / 6 * 100)
 
-	    ..\go\BoyerAlgorithm\BoyerAlgorithm.exe $($resource.FileName) "$($resource.Word)" $multiplier $num | 
+	    ..\go\MatchableString\MatchableString.exe boyer $($resource.FileName) "$($resource.Word)" $multiplier $num | 
                                                     Out-File BoyerAlgorithm\data_go.csv -Append
         
         $i += 1
