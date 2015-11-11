@@ -40,13 +40,6 @@ func Measure(str string, pattern string, parallel bool, num int, creator Creator
 }
 
 func MeasureReadFile() {
-	var creator CreatorFunction
-	if os.Args[1] == "boyer" {
-		creator = createBoyer
-	} else {
-		creator = createSuffixArray
-	}
-
 	bytes, err := ioutil.ReadFile("..\\resources\\" + os.Args[2])
 
 	if err != nil {
@@ -74,8 +67,23 @@ func MeasureReadFile() {
 
 	fmt.Printf("%v;", len(original))
 
-	fmt.Printf("%v;", Measure(original, os.Args[3], false, num, creator))
-	fmt.Printf("%v\n", Measure(original, os.Args[3], true, num, creator))
+	if os.Args[1] == "both" {
+		fmt.Printf("%v;", num)
+
+		fmt.Printf("%v;", Measure(original, os.Args[3], true, num, createBoyer))
+		fmt.Printf("%v\n", Measure(original, os.Args[3], true, num, createSuffixArray))
+	} else {
+		var creator CreatorFunction
+		if os.Args[1] == "boyer" {
+			creator = createBoyer
+		} else {
+			creator = createSuffixArray
+		}
+
+		fmt.Printf("%v;", Measure(original, os.Args[3], false, num, creator))
+		fmt.Printf("%v\n", Measure(original, os.Args[3], true, num, creator))
+	}
+
 }
 
 func measureSimple(creator CreatorFunction) {

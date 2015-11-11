@@ -44,9 +44,6 @@ namespace MatchableString
         {
             string path = "..\\resources\\" + args[1];
 
-            CreatorFunction func = (args[0] == "boyer") ?
-                   new CreatorFunction(MatchableStrings.CreateBoyer) :
-                   new CreatorFunction(MatchableStrings.CreateSuffixArray);
             int multiplier = int.Parse(args[3]);
             int matchNum = int.Parse(args[4]);
 
@@ -60,8 +57,22 @@ namespace MatchableString
 
             Console.Write(str.Length + ";");
 
-            Console.Write(measure(str, args[2], false, matchNum, func) + ";");
-            Console.WriteLine(measure(str, args[2], true, matchNum, func));
+            if (args[0] == "both")
+            {
+                Console.Write(matchNum + ";");
+
+                Console.Write(measure(str, args[2], true, matchNum, MatchableStrings.CreateBoyer) + ";");
+                Console.WriteLine(measure(str, args[2], true, matchNum, MatchableStrings.CreateSuffixArray));
+            }
+            else
+            {
+                CreatorFunction func = (args[0] == "boyer") ?
+                   new CreatorFunction(MatchableStrings.CreateBoyer) :
+                   new CreatorFunction(MatchableStrings.CreateSuffixArray);
+
+                Console.Write(measure(str, args[2], false, matchNum, func) + ";");
+                Console.WriteLine(measure(str, args[2], true, matchNum, func));
+            }
         }
 
         private static void measureSimple(CreatorFunction func)

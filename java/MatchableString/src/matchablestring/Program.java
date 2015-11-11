@@ -49,7 +49,7 @@ public class Program {
     private static void measureReadFile(String[] args) {
         String path = "..\\resources\\" + args[1];
 
-        Function<String, MatchableString> func = (args[0].equals("boyer")) ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
+
         int multiplier = Integer.parseInt(args[3]);
         int matchNum = Integer.parseInt(args[4]);
 
@@ -62,8 +62,17 @@ public class Program {
 
         System.out.print(str.length() + ";");
 
-        System.out.print(measure(str, args[2], false, matchNum, func) + ";");
-        System.out.println(measure(str, args[2], true, matchNum, func));
+        if (args[0].equals("both")) {
+            System.out.print(matchNum + ";");
+
+            System.out.print(measure(str, args[2], true, matchNum, MatchableStrings::createBoyer) + ";");
+            System.out.println(measure(str, args[2], true, matchNum, MatchableStrings::createSuffixArray));
+        } else {
+            Function<String, MatchableString> func = (args[0].equals("boyer")) ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
+
+            System.out.print(measure(str, args[2], false, matchNum, func) + ";");
+            System.out.println(measure(str, args[2], true, matchNum, func));
+        }
     }
 
     private static void measureSimple(Function<String, MatchableString> func) {

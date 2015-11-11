@@ -50,7 +50,6 @@ void measureReadFile(char **argv) {
 	std::string path = "..\\resources\\";
 	path += argv[2];
 
-	CreatorFunction func = strcmp(argv[1], "boyer") == 0 ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
 	int multiplier = atoi(argv[4]);
 	int matchNum = atoi(argv[5]);
 
@@ -68,8 +67,17 @@ void measureReadFile(char **argv) {
 
 	std::cout << strlen(str) << ";";
 
-	std::cout << measure(str, argv[3], false, matchNum, func) << ";";
-	std::cout << measure(str, argv[3], true, matchNum, func) << std::endl;
+	if (strcmp(argv[1], "both") == 0) {
+		std::cout << matchNum << ";";
+
+		std::cout << measure(str, argv[3], true, matchNum, MatchableStrings::createBoyer) << ";";
+		std::cout << measure(str, argv[3], true, matchNum, MatchableStrings::createSuffixArray) << std::endl;
+	} else {
+		CreatorFunction func = strcmp(argv[1], "boyer") == 0 ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
+
+		std::cout << measure(str, argv[3], false, matchNum, func) << ";";
+		std::cout << measure(str, argv[3], true, matchNum, func) << std::endl;
+	}
 }
     
 void measureSimple(CreatorFunction func) {
