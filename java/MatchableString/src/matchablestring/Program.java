@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -26,9 +27,11 @@ public class Program {
     private static long measure(String orig, String pat, boolean parallel, int matchNum, Function<String, MatchableString> func) {
         List<Integer> l = null;
 
-        long start = System.nanoTime();     // mérés indul
+        List<Long> data = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 12; i++) {
+            long start = System.nanoTime();     // mérés indul
+
             MatchableString str = func.apply(orig);
             str.preprocess(parallel);
 
@@ -36,19 +39,18 @@ public class Program {
                 Pattern p = new Pattern(pat);
                 l = str.match(p, parallel);
             }
-        }
 
-        long elapsed = (System.nanoTime() - start) / 1000000 / 5;
+            data.add((System.nanoTime() - start) / 1000000);
+        }
 
 //        System.out.println((parallel ? "Parallel" : "Single thread") + " matching took " + (elapsed / 1000) + " s " + (elapsed % 1000) + " ms");
 //        System.out.println("Found " + l.size() + " matches.");
 
-        return elapsed;
+        return AverageCounter.countAverage(data);
     }
 
-    private static void measureReadFile(String[] args) {
+    private static void measureReadFile(String[] args, boolean isWarmUp) {
         String path = "..\\resources\\" + args[1];
-
 
         int multiplier = Integer.parseInt(args[3]);
         int matchNum = Integer.parseInt(args[4]);
@@ -60,18 +62,32 @@ public class Program {
             str += orig;
         }
 
-        System.out.print(str.length() + ";");
+        if (!isWarmUp) {
+            System.out.print(str.length() + ";");
+        }
 
         if (args[0].equals("both")) {
-            System.out.print(matchNum + ";");
+            if (!isWarmUp) {
+                System.out.print(matchNum + ";");
+            }
 
-            System.out.print(measure(str, args[2], true, matchNum, MatchableStrings::createBoyer) + ";");
-            System.out.println(measure(str, args[2], true, matchNum, MatchableStrings::createSuffixArray));
+            long boyer = measure(str, args[2], true, matchNum, MatchableStrings::createBoyer);
+            long suffixArray = measure(str, args[2], true, matchNum, MatchableStrings::createSuffixArray);
+
+            if (!isWarmUp) {
+                System.out.print(boyer + ";");
+                System.out.println(suffixArray);
+            }
         } else {
             Function<String, MatchableString> func = (args[0].equals("boyer")) ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
 
-            System.out.print(measure(str, args[2], false, matchNum, func) + ";");
-            System.out.println(measure(str, args[2], true, matchNum, func));
+            long singleThread = measure(str, args[2], false, matchNum, func);
+            long parallel = measure(str, args[2], true, matchNum, func);
+
+            if (!isWarmUp) {
+                System.out.print(singleThread + ";");
+                System.out.println(parallel);
+            }
         }
     }
 
@@ -93,6 +109,9 @@ public class Program {
 //        measureSimple(MatchableStrings::createBoyer);
 //        measureSimple(MatchableStrings::createSuffixArray);
 
-        measureReadFile(args);
+        String[] warmUpArgs = new String[]{args[0], "00_alice.txt", "CURTSEYING", "1", "1"};
+
+        measureReadFile(warmUpArgs, true);
+        measureReadFile(args, false);
     }
 }
