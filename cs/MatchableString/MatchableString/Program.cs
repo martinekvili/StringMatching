@@ -69,7 +69,7 @@ namespace MatchableString
                 CreatorFunction func = (args[0] == "boyer") ?
                    new CreatorFunction(MatchableStrings.CreateBoyer) :
                    new CreatorFunction(MatchableStrings.CreateSuffixArray);
-
+                
                 Console.Write(measure(str, args[2], false, matchNum, func) + ";");
                 Console.WriteLine(measure(str, args[2], true, matchNum, func));
             }

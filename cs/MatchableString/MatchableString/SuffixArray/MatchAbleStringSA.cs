@@ -13,6 +13,11 @@ namespace MatchableString.SuffixArray
 
         private int binarySearch(int min, int max, ComparerBase comparer)
         {
+            if (min == max)
+            {
+                return -1;
+            }
+
             int num = (min + max) / 2;
 
             switch (comparer.Compare(num))
