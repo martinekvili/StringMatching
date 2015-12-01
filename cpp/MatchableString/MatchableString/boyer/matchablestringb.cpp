@@ -47,34 +47,35 @@ std::vector<int> MatchableStringB::match(Pattern &p, bool parallel) const {
 		p.preprocess();
 	}
 
-	const int parts = 8;
-
-    std::vector<std::vector<int>*> occurrencesArray(parts);
+	std::vector<int> occurrences;
     
 	if (!parallel) {
-		for (int i = 0; i < parts; i++) {
-			occurrencesArray[i] = matchSubstr(p, parts, i);
-		}
+		auto tmp = matchSubstr(p, str, length, 0);
+		occurrences = std::move(*tmp);
+		delete tmp;
 	}
 	else {
+		const int parts = tbb::task_scheduler_init::default_num_threads();
+		std::vector<std::vector<int>*> occurrencesArray(parts);
+
 		tbb::parallel_for(tbb::blocked_range<int>(0, parts),
 			[this, &occurrencesArray, &p, parts](const tbb::blocked_range<int>& range) {
 			for (int i = range.begin(); i != range.end(); ++i) {
 				occurrencesArray[i] = matchSubstr(p, parts, i);
 			}
 		});
-	}
-	
-	size_t fullSize = 0;
-	for (int i = 0; i < parts; i++) {
-		fullSize += occurrencesArray[i]->size();
-	}
 
-	std::vector<int> occurrences;
-	occurrences.reserve(fullSize);
-	for (int i = 0; i < parts; i++) {
-		occurrences.insert(occurrences.end(), occurrencesArray[i]->begin(), occurrencesArray[i]->end());
-		delete occurrencesArray[i];
+		size_t fullSize = 0;
+		for (int i = 0; i < parts; i++) {
+			fullSize += occurrencesArray[i]->size();
+		}
+
+		occurrences.reserve(fullSize);
+		for (int i = 0; i < parts; i++) {
+			occurrences.insert(occurrences.end(), occurrencesArray[i]->begin(), occurrencesArray[i]->end());
+			delete occurrencesArray[i];
+		}
 	}
+		
     return occurrences;
 }

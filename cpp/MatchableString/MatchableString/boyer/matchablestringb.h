@@ -4,8 +4,7 @@
 #include <list>
 #include <vector>
 
-#include "tbb\blocked_range.h"
-#include "tbb\parallel_for.h"
+#include "tbb\tbb.h"
 
 #include "..\matchablestring.h"
 #include "..\pattern.h"
