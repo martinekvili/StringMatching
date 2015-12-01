@@ -1,6 +1,9 @@
 package main
 
-import "container/list"
+import (
+	"container/list"
+	"runtime"
+)
 
 type MatchableStringB struct {
 	str    string
@@ -66,28 +69,24 @@ func matchSubstr_(str string, pat *Pattern, strlen int, i int,
 	ch <- occurrencesArray[i].Len()
 }
 
-func (s *MatchableStringB) Match(pat *Pattern, parallel bool) []int {
+func (s *MatchableStringB) Match(pat *Pattern, parallel bool) (occurrences []int) {
 	if !pat.isPreprocessed {
 		pat.Preprocess()
 	}
 
-	parts := 8
-
-	size := 0
-	occurrencesArray := make([]list.List, parts)
-
 	if !parallel {
-		for i := 0; i < parts; i++ {
-			var subStr string
-			if i < parts-1 {
-				subStr = s.str[i*s.length/parts : (i+1)*s.length/parts+pat.length-1]
-			} else {
-				subStr = s.str[i*s.length/parts:]
-			}
-			occurrencesArray[i] = matchSubstr(subStr, pat, i*s.length/parts)
-			size += occurrencesArray[i].Len()
+		tmp := matchSubstr(s.str, pat, 0)
+		occurrences = make([]int, tmp.Len())
+
+		j := 0
+		for e := tmp.Front(); e != nil; e = e.Next() {
+			occurrences[j] = e.Value.(int)
+			j++
 		}
 	} else {
+		parts := runtime.NumCPU()
+		size := 0
+		occurrencesArray := make([]list.List, parts)
 		ch := make(chan int)
 
 		for i := 0; i < parts; i++ {
@@ -97,14 +96,14 @@ func (s *MatchableStringB) Match(pat *Pattern, parallel bool) []int {
 		for i := 0; i < parts; i++ {
 			size += <-ch
 		}
-	}
 
-	occurrences := make([]int, size)
-	j := 0
-	for i := 0; i < parts; i++ {
-		for e := occurrencesArray[i].Front(); e != nil; e = e.Next() {
-			occurrences[j] = e.Value.(int)
-			j++
+		occurrences = make([]int, size)
+		j := 0
+		for i := 0; i < parts; i++ {
+			for e := occurrencesArray[i].Front(); e != nil; e = e.Next() {
+				occurrences[j] = e.Value.(int)
+				j++
+			}
 		}
 	}
 
