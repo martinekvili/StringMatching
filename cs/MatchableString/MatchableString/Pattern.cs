@@ -48,7 +48,7 @@ namespace MatchableString
             {
                 if (j >= 0)
                 {
-                    if (string.Compare(Str, j, Str, i + 1, subPatternLength) == 0)
+                    if (string.Compare(Str, j, Str, i + 1, subPatternLength, StringComparison.Ordinal) == 0)
                     {
                         if (j == 0 || Str[j - 1] != Str[i])
                         {
@@ -58,7 +58,7 @@ namespace MatchableString
                 }
                 else
                 {
-                    if (string.Compare(Str, 0, Str, i + 1 - j, subPatternLength + j) == 0)
+                    if (string.Compare(Str, 0, Str, i + 1 - j, subPatternLength + j, StringComparison.Ordinal) == 0)
                     {
                         break;
                     }
