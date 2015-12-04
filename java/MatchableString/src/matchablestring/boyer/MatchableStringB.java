@@ -61,23 +61,22 @@ public class MatchableStringB extends MatchableString {
             pattern.preprocess();
         }
 
-        int parts = 8;
-
-        @SuppressWarnings("unchecked")
-        List<Integer>[] occurrencesArray = new ArrayList[parts];
+        List<Integer> occurrences;
 
         if (!parallel) {
-            for (int i = 0; i < parts; i++) {
-                occurrencesArray[i] = matchSubstr(pattern, parts, i);
-            }
+            occurrences = _matchSubstr(pattern, 0, Str.length());
         } else {
+            final int parts = Runtime.getRuntime().availableProcessors();
+            List<Integer>[] occurrencesArray = new ArrayList[parts];
+
             IntStream.range(0, parts).parallel().forEach(i -> occurrencesArray[i] = matchSubstr(pattern, parts, i));
+
+            occurrences = new ArrayList<>();
+            for (int i = 0; i < parts; i++) {
+                occurrences.addAll(occurrencesArray[i]);
+            }
         }
 
-        List<Integer> occurrences = new ArrayList<Integer>();
-        for (int i = 0; i < parts; i++) {
-            occurrences.addAll(occurrencesArray[i]);
-        }
         return occurrences;
     }
 }
