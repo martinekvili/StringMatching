@@ -70,31 +70,31 @@ namespace MatchableString.Boyer
                 pattern.PreProcess();
             }
 
-            int parts = 8;
+            List<int> occurrences;
 
-            List<int>[] occurrencesArray = new List<int>[parts];
 
             if (!parallel)
             {
-                for (int i = 0; i < parts; i++)
-                {
-                    occurrencesArray[i] = matchSubstr(pattern, parts, i);
-                }
+                occurrences = _matchSubstr(pattern, 0, Str.Length);
             }
             else
             {
+                int parts = Environment.ProcessorCount;
+                List<int>[] occurrencesArray = new List<int>[parts];
+
                 // Using parallel for
                 Parallel.For(0, parts, i => occurrencesArray[i] = matchSubstr(pattern, parts, i));
 
                 // Using P-LINQ
                 //Enumerable.Range(0, parts).AsParallel().ForAll(i => occurrencesArray[i] = matchSubstr(p, parts, i));
+
+                occurrences = new List<int>();
+                for (int i = 0; i < parts; i++)
+                {
+                    occurrences.AddRange(occurrencesArray[i]);
+                }
             }
 
-            List<int> occurrences = new List<int>();
-            for (int i = 0; i < parts; i++)
-            {
-                occurrences.AddRange(occurrencesArray[i]);
-            }
             return occurrences;
         }
     }
