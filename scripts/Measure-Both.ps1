@@ -4,6 +4,8 @@
     [switch] $java,
     [switch] $go)
 
+$resnum = 4
+
 $numbers = @(1, 10, 50, 100, 200, 500, 750, 1000, 1500, 2000)
 
 $resources = Import-Csv -Delimiter ";" -Path ..\resources.csv
@@ -16,10 +18,10 @@ if ($cpp) {
     $i = 0
     foreach ($number in $numbers) {
 	    Write-Progress -Activity "C++ matching" `
-                       -CurrentOperation "String matching on file $($resources[4].FileName) with word `"$($resources[4].Word)`" for $($number) times" `
+                       -CurrentOperation "String matching on file $($resources[$resnum].FileName) with word `"$($resources[$resnum].Word)`" for $($number) times" `
                        -PercentComplete $($i / 10 * 100)
 
-	    ..\cpp\MatchableString\x64\Release\MatchableString.exe both $($resources[4].FileName) "$($resources[4].Word)" 1 $number | 
+	    ..\cpp\MatchableString\x64\Release\MatchableString.exe both $($resources[$resnum].FileName) "$($resources[$resnum].Word)" 1 $number | 
                                                      Out-File Both\data_cpp.csv -Append
         
         $i += 1
@@ -36,10 +38,10 @@ if ($cs) {
     $i = 0
     foreach ($number in $numbers) {
 	    Write-Progress -Activity "C# matching" `
-                       -CurrentOperation "String matching on file $($resources[4].FileName) with word `"$($resources[4].Word)`" for $($number) times" `
+                       -CurrentOperation "String matching on file $($resources[$resnum].FileName) with word `"$($resources[$resnum].Word)`" for $($number) times" `
                        -PercentComplete $($i / 10 * 100)
 
-	    ..\cs\MatchableString\MatchableString\bin\Release\MatchableString.exe both $($resources[4].FileName) "$($resources[4].Word)" 1 $number | 
+	    ..\cs\MatchableString\MatchableString\bin\Release\MatchableString.exe both $($resources[$resnum].FileName) "$($resources[$resnum].Word)" 1 $number | 
                                                     Out-File Both\data_cs.csv -Append
 
         $i += 1
@@ -54,10 +56,10 @@ if ($java) {
     $i = 0
     foreach ($number in $numbers) {
 	    Write-Progress -Activity "Java matching" `
-                       -CurrentOperation "String matching on file $($resources[4].FileName) with word `"$($resources[4].Word)`" for $($number) times" `
+                       -CurrentOperation "String matching on file $($resources[$resnum].FileName) with word `"$($resources[$resnum].Word)`" for $($number) times" `
                        -PercentComplete $($i / 10 * 100)
 
-	    java -cp ..\java\MatchableString\out\production\MatchableString matchablestring.Program both $($resources[4].FileName) "$($resources[4].Word)" 1 $number | 
+	    java -cp ..\java\MatchableString\out\production\MatchableString matchablestring.Program both $($resources[$resnum].FileName) "$($resources[$resnum].Word)" 1 $number | 
                                                     Out-File Both\data_java.csv -Append
         
         $i += 1
@@ -72,10 +74,10 @@ if ($go) {
     $i = 0
     foreach ($number in $numbers) {
 	    Write-Progress -Activity "Go matching" `
-                       -CurrentOperation "String matching on file $($resources[4].FileName) with word `"$($resources[4].Word)`" for $($number) times" `
+                       -CurrentOperation "String matching on file $($resources[$resnum].FileName) with word `"$($resources[$resnum].Word)`" for $($number) times" `
                        -PercentComplete $($i / 10 * 100)
 
-	    ..\go\MatchableString\MatchableString.exe both $($resources[4].FileName) "$($resources[4].Word)" 1 $number | 
+	    ..\go\MatchableString\MatchableString.exe both $($resources[$resnum].FileName) "$($resources[$resnum].Word)" 1 $number | 
                                                     Out-File Both\data_go.csv -Append
         
         $i += 1
