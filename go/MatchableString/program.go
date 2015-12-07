@@ -72,6 +72,17 @@ func MeasureReadFile() {
 
 		fmt.Printf("%v;", Measure(original, os.Args[3], true, num, createBoyer))
 		fmt.Printf("%v\n", Measure(original, os.Args[3], true, num, createSuffixArray))
+	} else if os.Args[1] == "both_helped" {
+		fmt.Printf("%v;", num)
+
+		var fun CreatorFunction
+		if num >= 1000 {
+			fun = MoreThan1000Creator
+		} else {
+			fun = LessThan1000Creator
+		}
+
+		fmt.Printf("%v\n", Measure(original, os.Args[3], true, num, fun))
 	} else {
 		var creator CreatorFunction
 		if os.Args[1] == "boyer" {
@@ -103,18 +114,12 @@ func measureSimple(creator CreatorFunction) {
 	}
 }
 
-func createBoyer(str string) MatchableString {
-	var boyer MatchableStringB
-	boyer.SetString(str)
-
-	return &boyer
+func MoreThan1000Creator(str string) MatchableString {
+	return create(str, MoreThan1000)
 }
 
-func createSuffixArray(str string) MatchableString {
-	var suffixarray MatchableStringSA
-	suffixarray.SetString(str)
-
-	return &suffixarray
+func LessThan1000Creator(str string) MatchableString {
+	return create(str, LessThan1000)
 }
 
 func main() {
