@@ -78,6 +78,20 @@ public class Program {
                 System.out.print(boyer + ";");
                 System.out.println(suffixArray);
             }
+        } else if(args[0].equals("both_helped")) {
+            if (!isWarmUp) {
+                System.out.print(matchNum + ";");
+            }
+
+            Function<String, MatchableString> func = s ->
+                    MatchableStrings.create(s, matchNum >= 1000 ?
+                            MatchableStrings.NumberOfMatches.MoreThan1000 :
+                            MatchableStrings.NumberOfMatches.LessThan1000);
+            long helped = measure(str, args[2], true, matchNum, func);
+
+            if (!isWarmUp) {
+                System.out.println(helped);
+            }
         } else {
             Function<String, MatchableString> func = (args[0].equals("boyer")) ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
 
