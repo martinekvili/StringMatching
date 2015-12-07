@@ -6,6 +6,10 @@
 
 $resources = Import-Csv -Delimiter ";" -Path ..\resources.csv
 
+if (-not (Test-Path SuffixArrayAlgorithm)) {
+    New-Item -ItemType directory -Path SuffixArrayAlgorithm | Out-Null
+}
+
 if ($cpp) {
     if (Test-Path SuffixArrayAlgorithm\data_cpp.csv) {
         Remove-Item SuffixArrayAlgorithm\data_cpp.csv

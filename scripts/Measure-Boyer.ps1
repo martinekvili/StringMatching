@@ -9,6 +9,10 @@ $num = 50
 
 $resources = Import-Csv -Delimiter ";" -Path ..\resources.csv
 
+if (-not (Test-Path BoyerAlgorithm)) {
+    New-Item -ItemType directory -Path BoyerAlgorithm | Out-Null
+}
+
 if ($cpp) {
     if (Test-Path BoyerAlgorithm\data_cpp.csv) {
         Remove-Item BoyerAlgorithm\data_cpp.csv
