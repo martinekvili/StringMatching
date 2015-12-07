@@ -7,7 +7,7 @@
 #include "matchablestrings.h"
 #include "pattern.h"
 
-using CreatorFunction = std::unique_ptr<MatchableString>(*)(const char*);
+using CreatorFunction = std::function<std::unique_ptr<MatchableString>(const char*)>;
 
 char* ReadAllText(std::string path) {
 	std::ifstream t;
@@ -72,7 +72,17 @@ void measureReadFile(char **argv) {
 
 		std::cout << measure(str, argv[3], true, matchNum, MatchableStrings::createBoyer) << ";";
 		std::cout << measure(str, argv[3], true, matchNum, MatchableStrings::createSuffixArray) << std::endl;
-	} else {
+	}
+	else if (strcmp(argv[1], "both_helped") == 0) {
+		std::cout << matchNum << ";";
+
+		CreatorFunction func = std::bind(MatchableStrings::create,
+			std::placeholders::_1,
+			matchNum >= 1000 ? MatchableStrings::NumberOfMatches::MoreThan1000 : MatchableStrings::NumberOfMatches::LessThan1000);
+
+		std::cout << measure(str, argv[3], true, matchNum, func) << std::endl;
+	}
+	else {
 		CreatorFunction func = strcmp(argv[1], "boyer") == 0 ? MatchableStrings::createBoyer : MatchableStrings::createSuffixArray;
 
 		std::cout << measure(str, argv[3], false, matchNum, func) << ";";
