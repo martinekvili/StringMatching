@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MatchableString
 {
+    using CreatorFunction = Func<string, MatchableString>;
+
     public class Program
     {
-        private delegate MatchableString CreatorFunction(string s);
-
         private static long measure(string orig, string pat, bool parallel, int matchNum, CreatorFunction func)
         {
             List<int> l = null;
@@ -64,12 +64,23 @@ namespace MatchableString
                 Console.Write(measure(str, args[2], true, matchNum, MatchableStrings.CreateBoyer) + ";");
                 Console.WriteLine(measure(str, args[2], true, matchNum, MatchableStrings.CreateSuffixArray));
             }
+            else if (args[0] == "both_helped")
+            {
+                Console.Write(matchNum + ";");
+
+                CreatorFunction func = s =>
+                    MatchableStrings.Create(s, matchNum >= 1000 ?
+                    MatchableStrings.NumberOfMatches.MoreThan1000 :
+                    MatchableStrings.NumberOfMatches.LessThan1000);
+
+                Console.WriteLine(measure(str, args[2], true, matchNum, func));
+            }
             else
             {
                 CreatorFunction func = (args[0] == "boyer") ?
                    new CreatorFunction(MatchableStrings.CreateBoyer) :
                    new CreatorFunction(MatchableStrings.CreateSuffixArray);
-                
+
                 Console.Write(measure(str, args[2], false, matchNum, func) + ";");
                 Console.WriteLine(measure(str, args[2], true, matchNum, func));
             }
