@@ -20,6 +20,11 @@ class Pattern {
 	bool preprocessed;
 
 public:
+
+	/**
+	 * Creates a pattern object.
+	 * @param str The string to use as a pattern
+	 */
     Pattern(const std::string& s);
     ~Pattern();
 
@@ -50,6 +55,9 @@ public:
 		return preprocessed;
 	}
 
+	/**
+	 * Preprocesses the pattern. Doesn't have to be called by the user.
+	 */
     void preprocess();
 };
 

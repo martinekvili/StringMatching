@@ -66,6 +66,10 @@ public class Pattern {
         return preprocessed;
     }
 
+    /**
+     * Creates a pattern object.
+     * @param str The string to use as a pattern
+     */
     public Pattern(String str) {
         Str = str;
 
@@ -75,6 +79,9 @@ public class Pattern {
         preprocessed = false;
     }
 
+    /**
+     * Preprocesses the pattern. Doesn't have to be called by the user.
+     */
     public void preprocess() {
         fillDelta1();
         fillDelta2();

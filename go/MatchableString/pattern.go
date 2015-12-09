@@ -61,6 +61,7 @@ func (p *Pattern) setDelta2() {
 	}
 }
 
+// Preprocesses the pattern. Doesn't have to be called by the user.
 func (p *Pattern) Preprocess() {
 	p.setDelta1()
 	p.setDelta2()

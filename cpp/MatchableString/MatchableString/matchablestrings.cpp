@@ -14,5 +14,7 @@ std::unique_ptr<MatchableString> MatchableStrings::create(const char *s, NumberO
 		return std::make_unique<MatchableStringB>(s);
 	case MoreThan1000:
 		return std::make_unique<MatchableStringSA>(s);
+	default:
+		return nullptr;
 	}
 }

@@ -89,6 +89,10 @@ namespace MatchableString
             }
         }
 
+        /// <summary>
+        /// Creates a pattern object.
+        /// </summary>
+        /// <param name="str">The string to use as a pattern.</param>
         public Pattern(string str)
         {
             Str = str;
@@ -99,6 +103,9 @@ namespace MatchableString
             IsPreprocessed = false;
         }
 
+        /// <summary>
+        /// Preprocesses the pattern. Doesn't have to be called by the user.
+        /// </summary>
         public void PreProcess()
         {
             fillDelta1();
